@@ -6,7 +6,5 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class AuthorController extends AbstractController{
 
-public function index(){
 
-}
 }
