@@ -19,28 +19,28 @@ class Authors
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $authorsId;
+    public $authorsId;
 
     /**
      * @var int
      *
      * @ORM\Column(name="Authors_Votes", type="integer", nullable=false)
      */
-    private $authorsVotes;
+    public $authorsVotes;
 
     /**
      * @var string
      *
      * @ORM\Column(name="Authors_Name", type="string", length=255, nullable=false)
      */
-    private $authorsName;
+    public $authorsName;
 
     /**
      * @var string
      *
      * @ORM\Column(name="Authors_Email", type="string", length=320, nullable=false)
      */
-    private $authorsEmail;
+    public $authorsEmail;
 
 
 }

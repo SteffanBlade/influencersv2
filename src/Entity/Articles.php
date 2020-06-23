@@ -50,6 +50,17 @@ class Articles
      */
     public $articlesImage;
 
+    public function getPhoto()
+    {
+        return imagecreatefromstring($this->articlesImage);
+    }
+
+    public function displayPhoto()
+    {
+        rewind($this->getPhoto());
+        return "data:image/jpg;base64," . base64_encode(stream_get_contents($this->getPhoto()));
+    }
+
     /**
      * @return string
      */
@@ -75,7 +86,7 @@ class Articles
 
 
     /**
-     * @var \Author
+     * @var string
      *
      * @ORM\ManyToOne(targetEntity="Authors")
      * @ORM\JoinColumns({
@@ -87,7 +98,7 @@ class Articles
 
 
     /**
-     * @var \Tags
+     * @var string
      *
      * @ORM\ManyToOne(targetEntity="Tags")
      * @ORM\JoinColumns({

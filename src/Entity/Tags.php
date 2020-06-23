@@ -19,28 +19,28 @@ class Tags
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $tagsId;
+    public $tagsId;
 
     /**
      * @var string|null
      *
      * @ORM\Column(name="Tag_First", type="string", length=50, nullable=true)
      */
-    private $tagFirst;
+    public $tagFirst;
 
     /**
      * @var string|null
      *
      * @ORM\Column(name="Tag_Second", type="string", length=50, nullable=true)
      */
-    private $tagSecond;
+    public $tagSecond;
 
     /**
      * @var string|null
      *
      * @ORM\Column(name="Tag_Third", type="string", length=50, nullable=true)
      */
-    private $tagThird;
+    public $tagThird;
 
 
 }

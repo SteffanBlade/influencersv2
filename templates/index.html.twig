@@ -15,7 +15,9 @@
                                     <h5 class="card-title">{{ article.articlesTitle }}</h5>
                                     <p class="card-text">{{ article.articlesContent }}</p>
                                     <div class="card-footer text-muted">
-                                          {{ article.articlesDate|date("Y/m/d") }}
+                                        {{ article.articlesAuthors.authorsName }} - {{ article.articlesDate|date("Y/m/d") }}
+{#                                        <img src="{{ article.displayPhoto }}">#}
+
                                     </div>
 {#                                    <a href="/current/{{ article.id }}" class="btn btn-primary">See all</a>#}
 {#                                    <a href="/{{ article.id }}" class="btn btn-primary">Like</a>#}
