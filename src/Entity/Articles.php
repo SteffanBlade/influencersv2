@@ -2,12 +2,13 @@
 
 namespace App\Entity;
 
+use Cassandra\Blob;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Articles
  *
- * @ORM\Table(name="articles", indexes={@ORM\Index(name="Articles_Tags_Id", columns={"Articles_Tags_Id"}), @ORM\Index(name="Articles_Authors_Id", columns={"Articles_Authors_Id"})})
+ * @ORM\Table(name="articles", indexes={@ORM\Index(name="Articles_Authors_Id", columns={"Articles_Authors_Id"}), @ORM\Index(name="Articles_Tags_Id", columns={"Articles_Tags_Id"})})
  * @ORM\Entity
  */
 class Articles
@@ -19,59 +20,71 @@ class Articles
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $articlesId;
+    public $articlesId;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="Articles_Date", type="datetime", nullable=false)
      */
-    private $articlesDate;
+    public $articlesDate;
 
     /**
      * @var string
      *
      * @ORM\Column(name="Articles_Title", type="string", length=250, nullable=false)
      */
-    private $articlesTitle;
+    public $articlesTitle;
 
     /**
      * @var string
      *
      * @ORM\Column(name="Articles_Content", type="text", length=16777215, nullable=false)
      */
-    private $articlesContent;
+    public $articlesContent;
 
     /**
-     * @var binary
+     * @var string
      *
-     * @ORM\Column(name="Articles_Image", type="binary", nullable=false)
+     * @ORM\Column(name="Articles_Image", type="blob", length=65535, nullable=false)
      */
-    private $articlesImage;
+    public $articlesImage;
+
+    /**
+     * @return string
+     */
+    public function getArticlesImage(): string
+    {
+        return $this->articlesImage;
+    }
 
     /**
      * @var bool
      *
      * @ORM\Column(name="Articles_Edit", type="boolean", nullable=false)
      */
-    private $articlesEdit;
+    public $articlesEdit;
 
     /**
      * @var int
      *
      * @ORM\Column(name="Articles_Votes", type="integer", nullable=false)
      */
-    private $articlesVotes;
+    public $articlesVotes;
+
+
 
     /**
-     * @var \Authors
+     * @var \Author
      *
      * @ORM\ManyToOne(targetEntity="Authors")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="Articles_Authors_Id", referencedColumnName="Authors_Id")
      * })
      */
-    private $articlesAuthors;
+    public $articlesAuthors;
+
+
 
     /**
      * @var \Tags
@@ -81,7 +94,7 @@ class Articles
      *   @ORM\JoinColumn(name="Articles_Tags_Id", referencedColumnName="Tags_Id")
      * })
      */
-    private $articlesTags;
+    public $articlesTags;
 
 
 }
