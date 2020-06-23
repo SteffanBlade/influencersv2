@@ -8,19 +8,19 @@
                 {% if articles %}
                     {% for article in articles %}
 
-                        <div class="col-md-4 border-light mb-4 " >
-                            <div class="card align-items-center" style="width: 18rem;">
-{#                                <img src="data:image/jpeg;base64,{{ article.articlesImage }}" />#}
+                        <div class="col-md-4 border-light mb-4 w-100 p-3"  >
+                            <div class="card align-items-center containerCard" >
+                                <img src="data:image/png;base64,{{ article.articlesImage }}" />
                                 <div class="card-body">
                                     <h5 class="card-title">{{ article.articlesTitle }}</h5>
-                                    <p class="card-text">{{ article.articlesContent }}</p>
+                                    <p class="card-text" >{{ article.articlesContent }}</p>
                                     <div class="card-footer text-muted">
                                         {{ article.articlesAuthors.authorsName }} - {{ article.articlesDate|date("Y/m/d") }}
 {#                                        <img src="{{ article.displayPhoto }}">#}
 
                                     </div>
-{#                                    <a href="/current/{{ article.id }}" class="btn btn-primary">See all</a>#}
-{#                                    <a href="/{{ article.id }}" class="btn btn-primary">Like</a>#}
+                                    <a href="/current/{{ article.articlesId }}" class="btn btn-primary">See all</a>
+                                    <a href="/" class="btn btn-primary">Like</a>
 {#                                    <p>Likes-{{ article.likes }}</p>#}
 {#                                </div>#}
 

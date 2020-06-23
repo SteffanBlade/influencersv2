@@ -2,6 +2,7 @@
 namespace App\Controller ;
 
 
+
 use App\Entity\Articles;
 use App\Entity\Authors;
 use Symfony\Component\HttpFoundation\Response;
@@ -38,6 +39,17 @@ public function index()
     public function ranking(){
 
         return $this->render('ranking.html.twig');
+    }
+
+    /**
+     * @Route("/current/{id}")
+     */
+    public function CurrentArticle($id)
+    {
+        $articles = $this->getDoctrine()
+            ->getRepository(Articles::class)
+            ->find($id);
+        return $this->render('singleArticle.html.twig',array('article' => $articles));
     }
 
 

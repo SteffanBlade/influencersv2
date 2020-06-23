@@ -1,1 +1,21 @@
 {% extends 'base.html.twig' %}
+
+{% block title  %}Influencer's Article{% endblock %}
+
+{% block body %}
+    <div class="card text-center">
+        <div class="card-header">
+            Featured
+        </div>
+        <div class="card-body">
+            <h5>{{ article.articlesAuthors.authorsName }} - {{ article.articlesDate|date("Y/m/d") }}</h5>
+            <h3 class="card-title">{{ article.articlesTitle }}</h3>
+            <p class="card-text">{{ article.articlesContent }}</p>
+            <<a href="/" class="btn btn-primary">Like</a>
+        </div>
+        <div class="card-footer text-muted">
+            2 days ago
+        </div>
+    </div>
+{% endblock %}
+
