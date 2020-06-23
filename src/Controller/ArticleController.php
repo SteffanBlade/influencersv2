@@ -13,15 +13,33 @@ class ArticleController extends AbstractController{
     /**
      * @Route("/")
      * */
-public function index(){
+public function index()
+{
 
     $articles = $this->getDoctrine()
         ->getRepository(Articles::class)
         ->findBy(array(), array('articlesDate' => 'DESC'));
 
 
-    return $this->render('index.html.twig',array('articles' => $articles));
+    return $this->render('index.html.twig', array('articles' => $articles));
 
 }
+    /**
+     * @Route("/new")
+     * */
+    public function new(){
+
+        return $this->render('newArticle.html.twig');
+    }
+
+    /**
+     * @Route("/ranking")
+     * */
+    public function ranking(){
+
+        return $this->render('ranking.html.twig');
+    }
+
+
 
 }
