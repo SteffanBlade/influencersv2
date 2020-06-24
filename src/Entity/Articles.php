@@ -2,7 +2,7 @@
 
 namespace App\Entity;
 
-use Cassandra\Blob;
+
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -50,24 +50,8 @@ class Articles
      */
     public $articlesImage;
 
-    public function getPhoto()
-    {
-        return imagecreatefromstring($this->articlesImage);
-    }
 
-    public function displayPhoto()
-    {
-        rewind($this->getPhoto());
-        return "data:image/jpg;base64," . base64_encode(stream_get_contents($this->getPhoto()));
-    }
 
-    /**
-     * @return string
-     */
-    public function getArticlesImage(): string
-    {
-        return $this->articlesImage;
-    }
 
     /**
      * @var bool
@@ -82,6 +66,15 @@ class Articles
      * @ORM\Column(name="Articles_Votes", type="integer", nullable=false)
      */
     public $articlesVotes;
+
+
+    public function setArticlesVotes(): void
+    {
+        $this->articlesVotes = $this->articlesVotes + 1;
+    }
+
+
+
 
 
 

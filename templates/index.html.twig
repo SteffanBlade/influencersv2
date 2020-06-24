@@ -16,14 +16,14 @@
                                     <p class="card-text" >{{ article.articlesContent }}</p>
                                     <div class="card-footer text-muted">
                                         {{ article.articlesAuthors.authorsName }} - {{ article.articlesDate|date("Y/m/d") }}
-{#                                        <img src="{{ article.displayPhoto }}">#}
+
 
                                     </div>
                                     <a href="/current/{{ article.articlesId }}" class="btn btn-primary">See all</a>
-                                    <a href="/" class="btn btn-primary">Like</a>
-{#                                    <p>Likes-{{ article.likes }}</p>#}
-{#                                </div>#}
-
+                                    <a href="/{{ article.articlesId }}" class="btn btn-primary">Like {{ article.articlesVotes }}</a>
+                                    <p>Likes-{{ article.articlesAuthors.authorsName }} - {{ article.articlesAuthors.authorsVotes }}</p>
+                                </div>
+                            </div>
                             </div>
                         </div>
                         </div>

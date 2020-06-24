@@ -3,7 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
+use App\Entity\Articles;
 /**
  * Authors
  *
@@ -27,6 +27,14 @@ class Authors
      * @ORM\Column(name="Authors_Votes", type="integer", nullable=false)
      */
     public $authorsVotes;
+
+
+    public function setAuthorsVotes(): void
+    {
+        $this->authorsVotes = $this->authorsVotes + 1;
+    }
+
+
 
     /**
      * @var string

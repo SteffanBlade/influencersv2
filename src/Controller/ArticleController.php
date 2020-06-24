@@ -3,6 +3,7 @@ namespace App\Controller ;
 
 
 
+
 use App\Entity\Articles;
 use App\Entity\Authors;
 use Symfony\Component\HttpFoundation\Response;
@@ -12,7 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class ArticleController extends AbstractController{
 
     /**
-     * @Route("/")
+     * @Route("/",name="index")
      * */
 public function index()
 {
@@ -50,6 +51,26 @@ public function index()
             ->getRepository(Articles::class)
             ->find($id);
         return $this->render('singleArticle.html.twig',array('article' => $articles));
+    }
+
+    /**
+     * @Route("/{id}",name="liked")
+     */
+    public function likeIt($id){
+        $articles = $this->getDoctrine()
+            ->getRepository(Articles::class)
+            ->find($id);
+
+        $authorsVariable = $articles->articlesAuthors;
+
+        $authors = $this->getDoctrine()->getRepository(Authors::class)->find($authorsVariable);
+        $articles->setArticlesVotes();
+        $authors->setAuthorsVotes();
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($articles);
+        $entityManager->flush();
+        return $this->redirectToRoute("index");
     }
 
 
