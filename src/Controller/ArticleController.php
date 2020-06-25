@@ -64,17 +64,19 @@ public function index()
     /**
      * @Route("/{id}",name="liked")
      */
-    public function likeIt($id,Request $request){
+    public function likeIt($id){
         $articles = $this->getDoctrine()
             ->getRepository(Articles::class)
             ->find($id);
         $authorsVariable = $articles->articlesAuthors;
         $authors = $this->getDoctrine()->getRepository(Authors::class)->find($authorsVariable);
         $request = Request::createFromGlobals();
-        $setCookie = new Cookie('like', '1', time()+3600);
+
+        $random = 1;
+        $setCookie = new Cookie($articles->articlesId,$random, time()+3600);
         $cookie = $request->cookies;
-        if($cookie->has('like')){
-            return $this->redirectToRoute("ranking");
+        if($cookie->get($articles->articlesId) == $random){
+            return $this->redirectToRoute("index");
         }
         else{
             $response = new Response();
@@ -86,11 +88,8 @@ public function index()
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($articles);
             $entityManager->flush();
-            return $response;
+            return  $this->redirectToRoute('index');
         }
-//        return $response;
-//        return $this->redirectToRoute("index");
-
     }
 
 
