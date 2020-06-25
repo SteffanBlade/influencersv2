@@ -64,36 +64,33 @@ public function index()
     /**
      * @Route("/{id}",name="liked")
      */
-    public function likeIt($id){
-
-        $request = Request::createFromGlobals();
-
-
-        if (!($request->cookies->get('test')) ){
-            $cookieStorage = new Response();
-            $cookie = new Cookie('test', 1, time()+3600);
-            $cookieStorage->headers->setCookie($cookie);
-        }
-        elseif ($request->cookies->get('test') == "1"){
-            echo 'hi mate';  // test it - not working
-        }
-
-
-
+    public function likeIt($id,Request $request){
         $articles = $this->getDoctrine()
             ->getRepository(Articles::class)
             ->find($id);
-        $articles->setArticlesVotes();
-
         $authorsVariable = $articles->articlesAuthors;
         $authors = $this->getDoctrine()->getRepository(Authors::class)->find($authorsVariable);
-        $authors->setAuthorsVotes();
+        $request = Request::createFromGlobals();
+        $setCookie = new Cookie('like', '1', time()+3600);
+        $cookie = $request->cookies;
+        if($cookie->has('like')){
+            return $this->redirectToRoute("ranking");
+        }
+        else{
+            $response = new Response();
+            $response->headers->setCookie($setCookie);
+            $response->sendHeaders();
 
-        $entityManager = $this->getDoctrine()->getManager();
-        $entityManager->persist($articles);
-        $entityManager->flush();
+            $articles->setArticlesVotes();
+            $authors->setAuthorsVotes();
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($articles);
+            $entityManager->flush();
+            return $response;
+        }
+//        return $response;
+//        return $this->redirectToRoute("index");
 
-        return $this->redirectToRoute("index");
     }
 
 
