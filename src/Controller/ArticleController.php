@@ -6,9 +6,11 @@ namespace App\Controller ;
 
 use App\Entity\Articles;
 use App\Entity\Authors;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Cookie;
 
 class ArticleController extends AbstractController{
 
@@ -17,6 +19,8 @@ class ArticleController extends AbstractController{
      * */
 public function index()
 {
+
+
 
     $articles = $this->getDoctrine()
         ->getRepository(Articles::class)
@@ -35,11 +39,15 @@ public function index()
     }
 
     /**
-     * @Route("/ranking")
+     * @Route("/ranking",name = "ranking")
      * */
     public function ranking(){
 
-        return $this->render('ranking.html.twig');
+        $authors = $this->getDoctrine()
+            ->getRepository(Authors::class)
+            ->findBy(array(), array('authorsVotes' => 'DESC'));
+
+        return $this->render('ranking.html.twig',array('authors'=>$authors));
     }
 
     /**
@@ -57,20 +65,34 @@ public function index()
      * @Route("/{id}",name="liked")
      */
     public function likeIt($id){
+
+        $request = Request::createFromGlobals();
+
+
+        if (!($request->cookies->get('test')) ){
+            $cookieStorage = new Response();
+            $cookie = new Cookie('test', 1, time()+3600);
+            $cookieStorage->headers->setCookie($cookie);
+        }
+        elseif ($request->cookies->get('test') == "1"){
+            echo 'hi mate';  // test it - not working
+        }
+
+
+
         $articles = $this->getDoctrine()
             ->getRepository(Articles::class)
             ->find($id);
+        $articles->setArticlesVotes();
 
         $authorsVariable = $articles->articlesAuthors;
-
         $authors = $this->getDoctrine()->getRepository(Authors::class)->find($authorsVariable);
-        $articles->setArticlesVotes();
         $authors->setAuthorsVotes();
 
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->persist($articles);
         $entityManager->flush();
-//        return new Response();
+
         return $this->redirectToRoute("index");
     }
 

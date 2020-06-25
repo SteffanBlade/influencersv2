@@ -1,1 +1,13 @@
 {% extends 'base.html.twig' %}
+
+
+{% block body %}
+    {% if authors %}
+        {% for author in authors %}
+        <div>{{ author.authorsName }}-----{{ author.authorsVotes }}</div>
+        {% endfor %}
+    {% else %}
+        <h1>No author found</h1>
+    {% endif %}
+
+{% endblock %}
