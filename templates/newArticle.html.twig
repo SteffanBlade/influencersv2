@@ -1,1 +1,18 @@
 {% extends 'base.html.twig' %}
+{% block body %}
+    <form>
+        <div class="form-group">
+            <label for="title">Title</label>
+            <input type="email" class="form-control" id="title" placeholder="Title">
+        </div>
+        <label for="content">Content</label>
+        <textarea class="form-control" id="content" rows="3"></textarea>
+
+        <div class="form-group">
+            <label for="tags">Tags</label>
+            <input type="email" class="form-control" id="tags" placeholder="Tags">
+        </div>
+        </div>
+    </form>
+
+{% endblock %}
