@@ -70,6 +70,7 @@ public function index()
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->persist($articles);
         $entityManager->flush();
+//        return new Response();
         return $this->redirectToRoute("index");
     }
 

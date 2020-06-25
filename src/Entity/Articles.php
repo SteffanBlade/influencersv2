@@ -2,13 +2,12 @@
 
 namespace App\Entity;
 
-
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Articles
  *
- * @ORM\Table(name="articles", indexes={@ORM\Index(name="Articles_Authors_Id", columns={"Articles_Authors_Id"}), @ORM\Index(name="Articles_Tags_Id", columns={"Articles_Tags_Id"})})
+ * @ORM\Table(name="articles", indexes={@ORM\Index(name="Articles_Tags_Id", columns={"Articles_Tags"}), @ORM\Index(name="Articles_Authors_Id", columns={"Articles_Authors_Id"})})
  * @ORM\Entity
  */
 class Articles
@@ -21,6 +20,13 @@ class Articles
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     public $articlesId;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="Articles_Tags", type="string", length=255, nullable=false)
+     */
+    public $articlesTags;
 
     /**
      * @var \DateTime
@@ -44,21 +50,11 @@ class Articles
     public $articlesContent;
 
     /**
-     * @var string
+     * @var string|null
      *
-     * @ORM\Column(name="Articles_Image", type="blob", length=65535, nullable=false)
+     * @ORM\Column(name="Articles_Image", type="blob", length=0, nullable=true)
      */
     public $articlesImage;
-
-
-
-
-    /**
-     * @var bool
-     *
-     * @ORM\Column(name="Articles_Edit", type="boolean", nullable=false)
-     */
-    public $articlesEdit;
 
     /**
      * @var int
@@ -67,19 +63,16 @@ class Articles
      */
     public $articlesVotes;
 
-
+    /**
+     * @param int $articlesVotes
+     */
     public function setArticlesVotes(): void
     {
-        $this->articlesVotes = $this->articlesVotes + 1;
+        $this->articlesVotes = $this->articlesVotes+1;
     }
 
-
-
-
-
-
     /**
-     * @var string
+     * @var \Authors
      *
      * @ORM\ManyToOne(targetEntity="Authors")
      * @ORM\JoinColumns({
@@ -87,18 +80,6 @@ class Articles
      * })
      */
     public $articlesAuthors;
-
-
-
-    /**
-     * @var string
-     *
-     * @ORM\ManyToOne(targetEntity="Tags")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="Articles_Tags_Id", referencedColumnName="Tags_Id")
-     * })
-     */
-    public $articlesTags;
 
 
 }
