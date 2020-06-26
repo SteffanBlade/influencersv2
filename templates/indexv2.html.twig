@@ -1,26 +1,48 @@
 {% extends 'base.html.twig' %}
 {% block body %}
-    <h1>Articles</h1>
+    <h1 class="text-center">Articles</h1>
 
+    <div class="container d-flex ml-9 mr-0">
+        <div class="row w-75 align-self-start ">
+            {% for article in articles %}
+                <div class="container m-3" id="conainterInterior">
+                    <div class="col-12 border p-3 m-3 text-center">
 
-        <div class="container">
-                {% if articles %}
-                    <div class="row">
-                    {% for article in articles %}
-                        <div class="container">
-
-                                <div class="col-sm d-inline-block">
-                                    One of three columns
-                                </div>
-
+                        <div class="card-header row m-0 ">
+                            <div class="col-6 d-flex justify-content-start inline-block">
+                                {{ article.articlesAuthors.authorsName }}
+                            </div>
+                            <div class="col-6 d-flex justify-content-end inline-block">
+                                {{ article.articlesDate|date("Y/m/d") }}
+                            </div>
+                        </div>
+                        <div class="card-header">
+                            {{ article.articlesTitle }}
+                        </div>
+                        <div class="block-with-text   " style="height: 100px">
+                            {{ article.articlesContent }}
 
                         </div>
-                    {% endfor %}
+                        <br>
+                        <div class="mt-2">
+                            <hr>
+                            <a href="/current/{{ article.articlesId }}" class="btn btn-primary">See all</a>
+                            <a href="/{{ article.articlesId }}" class="btn btn-primary">Like</a>
+                            {{ article.articlesVotes }}
+                        </div>
                     </div>
-                {% else %}
-                    <h1>Nu este disponibil nici un articol</h1>
-                {% endif %}
-            </div>
+                </div>
+
+            {% endfor %}
+        </div>
+        <div class="row w-25 mr-0 align-self-end ">
+            {% for article in articlesVotes %}
+                <div class="col-12 text-center" ><a href="#"> {{ article.articlesTitle }}</a>
+                    - {{ article.articlesVotes }}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
 
 
 

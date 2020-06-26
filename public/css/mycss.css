@@ -1,0 +1,12 @@
+/*.mycontent-left {*/
+/*    !*border-right: 3px solid red;*!*/
+/*    margin-right: 0px;*/
+/*}*/
+
+.block-with-text {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+}
+

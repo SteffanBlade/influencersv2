@@ -28,8 +28,15 @@ public function index()
         ->getRepository(Articles::class)
         ->findBy(array(), array('articlesDate' => 'DESC'));
 
+    $articlesVotes = $this->getDoctrine()
+        ->getRepository(Articles::class)
+        ->findBy(array(), array('articlesVotes' => 'DESC'));
 
-    return $this->render('index.html.twig', array('articles' => $articles));
+
+    return $this->render('indexv2.html.twig',
+        array('articles' => $articles,
+            'articlesVotes' => $articlesVotes)
+    );
 
 
 }
