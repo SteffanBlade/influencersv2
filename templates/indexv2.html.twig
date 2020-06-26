@@ -27,7 +27,7 @@
                         <div class="mt-2">
                             <hr>
                             <a href="/current/{{ article.articlesId }}" class="btn btn-primary">See all</a>
-                            <a href="/{{ article.articlesId }}" class="btn btn-primary">Like</a>
+
                             {{ article.articlesVotes }}
                         </div>
                     </div>
@@ -37,6 +37,7 @@
         </div>
         <div class="row w-25 mr-0 align-self-end ">
             {% for article in articlesVotes %}
+
                 <div class="col-12 text-center" ><a href="#"> {{ article.articlesTitle }}</a>
                     - {{ article.articlesVotes }}
                 </div>

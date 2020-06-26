@@ -7,6 +7,7 @@ namespace App\Controller ;
 use App\Entity\Articles;
 use App\Entity\Authors;
 use App\Repository\ArticlesRepository;
+use PhpParser\Node\Scalar\String_;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -33,7 +34,7 @@ public function index()
         ->findBy(array(), array('articlesVotes' => 'DESC'));
 
 
-    return $this->render('indexv2.html.twig',
+    return $this->render('indexv3.html.twig',
         array('articles' => $articles,
             'articlesVotes' => $articlesVotes)
     );
@@ -82,15 +83,22 @@ public function index()
         $authors = $this->getDoctrine()->getRepository(Authors::class)->find($authorsVariable);
         $request = Request::createFromGlobals();
 
-        $random = 1;
-        $setCookie = new Cookie($articles->articlesId,$random, time()+3600);
+
+
+        $setCookie = new Cookie($articles->articlesId,1, time()+3600);
+
         $cookie = $request->cookies;
-        if($cookie->get($articles->articlesId) == $random){
+
+
+
+
+        if($cookie->get($articles->articlesId) == 1){
             return $this->redirectToRoute("index");
         }
         else{
             $response = new Response();
             $response->headers->setCookie($setCookie);
+
             $response->sendHeaders();
 
             $articles->setArticlesVotes();
