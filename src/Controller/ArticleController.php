@@ -6,6 +6,7 @@ namespace App\Controller ;
 
 use App\Entity\Articles;
 use App\Entity\Authors;
+use App\Repository\ArticlesRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,7 +20,8 @@ class ArticleController extends AbstractController{
      * */
 public function index()
 {
-
+    // Manual repository
+    //    $articlesTest = $this->getDoctrine()->getRepository(Articles::class)->testQuery();
 
 
     $articles = $this->getDoctrine()
@@ -28,6 +30,7 @@ public function index()
 
 
     return $this->render('index.html.twig', array('articles' => $articles));
+
 
 }
     /**
@@ -90,7 +93,11 @@ public function index()
             $entityManager->flush();
             return  $this->redirectToRoute('index');
         }
-    }
+
+        }
+
+
+
 
 
 

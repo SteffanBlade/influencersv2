@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <h1>Articles</h1>
+
+
+        <div class="container">
+                {% if articles %}
+                    <div class="row">
+                    {% for article in articles %}
+                        <div class="container">
+
+                                <div class="col-sm d-inline-block">
+                                    One of three columns
+                                </div>
+
+
+                        </div>
+                    {% endfor %}
+                    </div>
+                {% else %}
+                    <h1>Nu este disponibil nici un articol</h1>
+                {% endif %}
+            </div>
+
+
+
+{% endblock %}
