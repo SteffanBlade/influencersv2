@@ -3,52 +3,115 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+
 
 /**
  * Authors
  *
  * @ORM\Table(name="authors")
  * @ORM\Entity
+
  */
 class Authors
 {
     /**
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string $name
+     */
+    public function setName(string $name): void
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEmail(): string
+    {
+        return $this->email;
+    }
+
+    /**
+     * @param string $email
+     */
+    public function setEmail(string $email): void
+    {
+        $this->email = $email;
+    }
+
+    /**
+     * @return int
+     */
+    public function getVotes(): int
+    {
+        return $this->votes;
+    }
+
+    /**
+     * @param int $votes
+     */
+    public function setVotes(): void
+    {
+        $this->votes = $this->votes + 1;
+    }
+
+    /**
+     * @param int $votes
+     */
+    public function setVotesTo0(): void
+    {
+        $this->votes = 0;
+    }
+
+
+
+    /**
      * @var int
      *
-     * @ORM\Column(name="Authors_Id", type="integer", nullable=false)
+     * @ORM\Column(name="Id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    public $authorsId;
+    private $id;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="Authors_Votes", type="integer", nullable=false)
+     * @return int
      */
-    public $authorsVotes;
-
-    /**
-     * @param int $authorsVotes
-     */
-    public function setAuthorsVotes(): void
+    public function getId(): int
     {
-        $this->authorsVotes = $this->authorsVotes + 1;
+        return $this->id;
     }
 
     /**
      * @var string
      *
-     * @ORM\Column(name="Authors_Name", type="string", length=255, nullable=false)
+     * @ORM\Column(name="Name", type="string", length=250, nullable=false,unique=true)
      */
-    public $authorsName;
+    private $name;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="Authors_Email", type="string", length=320, nullable=false)
+     * @ORM\Column(name="Email", type="string", length=255, nullable=false,unique=true)
      */
-    public $authorsEmail;
+    private $email;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="Votes", type="integer", nullable=false)
+     */
+    private $votes;
+
+
 
 
 }

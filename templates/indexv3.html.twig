@@ -15,35 +15,35 @@
                         <div class="card-footer text-muted m-0 p-0">
                             <div class="card-header row m-0 ">
                                 <div class="col-6 d-flex justify-content-start inline-block">
-                                    {{ article.articlesAuthors.authorsName }}
+                                    {{ article.author.name }}
                                 </div>
                                 <div class="col-6 d-flex justify-content-end inline-block">
-                                    {{ article.articlesDate|date("Y/m/d") }}
+                                    {{ article.date|date("Y/m/d") }}
                                 </div>
                             </div>
                         </div>
 
                         <div class="card-body">
-                            <h2 class="card-title text-center">{{ article.articlesTitle }}</h2>
+                            <h2 class="card-title text-center">{{ article.title }}</h2>
                             <img class="card-img-top" src="http://placehold.it/750x300" alt="Card image cap">
-                            <p class="card-text block-with-text">{{ article.articlesContent }}</p>
+                            <p class="card-text block-with-text">{{ article.content }}</p>
 
                             <div class=" row m-0 ">
                                 <div class="col-6 d-flex justify-content-start inline-block">
-                                    <a href="/current/{{ article.articlesId }}" class="btn btn-primary">Read More</a>
+                                    <a href="/current/{{ article.id }}" class="btn btn-primary">Read More</a>
                                 </div>
                                 <div class="col-6 d-flex justify-content-end inline-block">
 
                                     {% if app.request.cookies.has('1') %}
 
-                                        <a href="/{{ article.articlesId }}" class="btn btn-primary disabled">Like</a>
-                                        <a href="/{{ article.articlesId }}"
-                                           class="btn disabled">{{ article.articlesVotes }}</a>
+                                        <a href="/{{ article.id }}" class="btn btn-primary disabled">Like</a>
+                                        <a href="/{{ article.id }}"
+                                           class="btn disabled">{{ article.votes }}</a>
                                     {% else %}
 
-                                        <a href="/{{ article.articlesId }}" class="btn btn-primary">Like</a>
-                                        <a href="/{{ article.articlesId }}"
-                                           class="btn disabled">{{ article.articlesVotes }}</a>
+                                        <a href="/{{ article.id }}" class="btn btn-primary">Like</a>
+                                        <a href="/{{ article.id }}"
+                                           class="btn disabled">{{ article.votes }}</a>
                                     {% endif %}
                                 </div>
                             </div>

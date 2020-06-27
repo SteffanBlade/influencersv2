@@ -4,10 +4,16 @@ namespace App\Controller ;
 
 
 
+
 use App\Entity\Articles;
 use App\Entity\Authors;
+use App\Form\ArticlesType;
 use App\Repository\ArticlesRepository;
-use PhpParser\Node\Scalar\String_;
+
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,33 +27,66 @@ class ArticleController extends AbstractController{
      * */
 public function index()
 {
-    // Manual repository
-    //    $articlesTest = $this->getDoctrine()->getRepository(Articles::class)->testQuery();
+
 
 
     $articles = $this->getDoctrine()
         ->getRepository(Articles::class)
-        ->findBy(array(), array('articlesDate' => 'DESC'));
+        ->findBy(array(), array('date' => 'DESC'));
 
-    $articlesVotes = $this->getDoctrine()
+    $votes = $this->getDoctrine()
         ->getRepository(Articles::class)
-        ->findBy(array(), array('articlesVotes' => 'DESC'));
+        ->findBy(array(), array('votes' => 'DESC'));
 
 
     return $this->render('indexv3.html.twig',
         array('articles' => $articles,
-            'articlesVotes' => $articlesVotes)
+            'votes' => $votes)
     );
 
 
 }
+
+
+
     /**
      * @Route("/new")
-     * */
-    public function new(){
+     */
+        public function new(Request $request)
+    {
+
+        $article = new Articles();
+        $author = new Authors();
+
+
+        if($request->isMethod('POST')) {
+            $author->setName($request->request->get('name'));
+            $author->setEmail($request->request->get('email'));
+            $author->setVotesTo0();
+
+            $article->setTitle($request->request->get('title'))  ;
+            $article->setContent($request->request->get('content'));
+            $article->setDate(new \datetime());
+            $article->setVotesTo0();
+            $article->setTags($request->request->get('tags'));
+            $article->setAuthor( $author);
+
+            $entityManager = $this->getDoctrine()->getManager();
+
+
+            $entityManager->persist($author);
+            $entityManager->persist($article);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('index');
+        }
+
+
 
         return $this->render('newArticle.html.twig');
     }
+
+
 
     /**
      * @Route("/ranking",name = "ranking")
@@ -56,7 +95,7 @@ public function index()
 
         $authors = $this->getDoctrine()
             ->getRepository(Authors::class)
-            ->findBy(array(), array('authorsVotes' => 'DESC'));
+            ->findBy(array(), array('votes' => 'DESC'));
 
         return $this->render('ranking.html.twig',array('authors'=>$authors));
     }
@@ -79,20 +118,16 @@ public function index()
         $articles = $this->getDoctrine()
             ->getRepository(Articles::class)
             ->find($id);
-        $authorsVariable = $articles->articlesAuthors;
+        $authorsVariable = $articles->author;
         $authors = $this->getDoctrine()->getRepository(Authors::class)->find($authorsVariable);
         $request = Request::createFromGlobals();
 
-
-
-        $setCookie = new Cookie($articles->articlesId,1, time()+3600);
+        $setCookie = new Cookie($articles->getId(),1, time()+3600);
 
         $cookie = $request->cookies;
 
 
-
-
-        if($cookie->get($articles->articlesId) == 1){
+        if($cookie->get($articles->getId()) == 1){
             return $this->redirectToRoute("index");
         }
         else{
@@ -101,8 +136,8 @@ public function index()
 
             $response->sendHeaders();
 
-            $articles->setArticlesVotes();
-            $authors->setAuthorsVotes();
+            $articles->setVotes();
+            $authors->setVotes();
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($articles);
             $entityManager->flush();
