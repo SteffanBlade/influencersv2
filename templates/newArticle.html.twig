@@ -1,18 +1,25 @@
 {% extends 'base.html.twig' %}
 {% block body %}
+    <div class="container">
     <form>
         <div class="form-group">
-            <label for="title">Title</label>
-            <input type="email" class="form-control" id="title" placeholder="Title">
+            <label for="name">Name</label>
+            <input type="text" class="form-control" id="name" placeholder="Mihai Ion">
         </div>
-        <label for="content">Content</label>
-        <textarea class="form-control" id="content" rows="3"></textarea>
+        <div class="form-group">
+            <label for="email">Email address</label>
+            <input type="email" class="form-control" id="email" placeholder="name@example.com">
+        </div>
+
 
         <div class="form-group">
-            <label for="tags">Tags</label>
-            <input type="email" class="form-control" id="tags" placeholder="Tags">
+            <label for="content">Content</label>
+            <textarea class="form-control" id="content" rows="3"></textarea>
         </div>
+        <div class="form-group">
+            <label for="image">Image 750x300</label>
+            <input type="file" class="form-control-file" id="image">
         </div>
     </form>
-
+    </div>
 {% endblock %}

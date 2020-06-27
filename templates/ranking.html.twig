@@ -2,12 +2,41 @@
 
 
 {% block body %}
+    <div class="container mt-3 text-center">
+        <h3>Top of the class</h3>
+<table class="table">
+    <thead class="thead-dark">
+    <tr>
+        <th scope="col">Place</th>
+        <th scope="col">Name</th>
+        <th scope="col">Votes</th>
+
+    </tr>
+    </thead>
+    <tbody>
     {% if authors %}
         {% for author in authors %}
-        <div>{{ author.authorsName }}-----{{ author.authorsVotes }}</div>
+
+            <tr>
+                <th scope="row">1</th>
+                <td>{{ author.authorsName }}</td>
+                <td>{{ author.authorsVotes }}</td>
+
+            </tr>
         {% endfor %}
     {% else %}
         <h1>No author found</h1>
     {% endif %}
-
+    </tbody>
+</table>
+    </div>
 {% endblock %}
+
+
+
+
+
+
+
+
+
