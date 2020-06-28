@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Articles
@@ -82,21 +83,6 @@ class Articles
         $this->tags = $tags;
     }
 
-    /**
-     * @return string
-     */
-    public function getImage(): string
-    {
-        return $this->image;
-    }
-
-    /**
-     * @param string $image
-     */
-    public function setImage(string $image): void
-    {
-        $this->image = $image;
-    }
 
     /**
      * @return \DateTime
@@ -131,8 +117,6 @@ class Articles
     }
 
 
-
-
     /**
      * @var string
      *
@@ -157,9 +141,25 @@ class Articles
     /**
      * @var string
      *
-     * @ORM\Column(name="image", type="string", length=100, nullable=false)
+     * @ORM\Column(name="image", type="string", length=255, nullable=false)
      */
     private $image;
+
+    /**
+     * @return string
+     */
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    /**
+     * @param string|null $image
+     */
+    public function setImage(string $image): void
+    {
+        $this->image = $image;
+    }
 
     /**
      * @var \DateTime
@@ -188,7 +188,7 @@ class Articles
     /**
      * @param  $author
      */
-    public function setAuthor( $author): void
+    public function setAuthor($author): void
     {
         $this->author = $author;
     }

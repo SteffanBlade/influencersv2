@@ -7,18 +7,23 @@ namespace App\Controller ;
 
 use App\Entity\Articles;
 use App\Entity\Authors;
+use App\Controller\UploadController;
 use App\Form\ArticlesType;
 use App\Repository\ArticlesRepository;
 
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Cookie;
+
 
 class ArticleController extends AbstractController{
 
@@ -50,26 +55,47 @@ public function index()
 
 
     /**
-     * @Route("/new")
+     * @Route("/new", name="create")
      */
-        public function new(Request $request)
+        public function new(Request $request )
     {
 
         $article = new Articles();
         $author = new Authors();
 
 
+
         if($request->isMethod('POST')) {
+
+            /**@var UploadedFile $uploadedImage */
+            $uploadedImage = $request->files->get('image');
+            $uploadDirectory = $this->getParameter('kernel.project_dir').'/public/images';
+
+            $originalImageName = pathinfo($uploadedImage->getClientOriginalName(),PATHINFO_FILENAME);
+            $newImageName =$originalImageName.'-'.uniqid().'.'.$uploadedImage->guessExtension();
+            $imagePath = (string)$newImageName;
+
+
+
+            $uploadedImage->move($uploadDirectory,
+               $newImageName
+            );
+
+            $article->setImage($imagePath);
             $author->setName($request->request->get('name'));
             $author->setEmail($request->request->get('email'));
             $author->setVotesTo0();
 
+            $article->setImage($newImageName);
             $article->setTitle($request->request->get('title'))  ;
             $article->setContent($request->request->get('content'));
             $article->setDate(new \datetime());
             $article->setVotesTo0();
             $article->setTags($request->request->get('tags'));
             $article->setAuthor( $author);
+
+
+
 
             $entityManager = $this->getDoctrine()->getManager();
 
@@ -78,7 +104,7 @@ public function index()
             $entityManager->persist($article);
             $entityManager->flush();
 
-            return $this->redirectToRoute('index');
+            return $this->render('newArticle.html.twig');
         }
 
 
@@ -97,7 +123,8 @@ public function index()
             ->getRepository(Authors::class)
             ->findBy(array(), array('votes' => 'DESC'));
 
-        return $this->render('ranking.html.twig',array('authors'=>$authors));
+        return $this->render('ranking.html.twig',array('authors'=>$authors),
+            );
     }
 
     /**

@@ -25,26 +25,19 @@
 
                         <div class="card-body">
                             <h2 class="card-title text-center">{{ article.title }}</h2>
-                            <img class="card-img-top" src="http://placehold.it/750x300" alt="Card image cap">
-                            <p class="card-text block-with-text">{{ article.content }}</p>
+                                {% if article.image != null %}
+                                    <img class="card-img-top" src="{{ asset('images/' ~  article.image ) }}" alt="Something is not right">
+                            {% endif %}
 
+                            <p class="card-text block-with-text">{{ article.content }}</p>
                             <div class=" row m-0 ">
                                 <div class="col-6 d-flex justify-content-start inline-block">
                                     <a href="/current/{{ article.id }}" class="btn btn-primary">Read More</a>
                                 </div>
                                 <div class="col-6 d-flex justify-content-end inline-block">
-
-                                    {% if app.request.cookies.has('1') %}
-
-                                        <a href="/{{ article.id }}" class="btn btn-primary disabled">Like</a>
-                                        <a href="/{{ article.id }}"
-                                           class="btn disabled">{{ article.votes }}</a>
-                                    {% else %}
-
                                         <a href="/{{ article.id }}" class="btn btn-primary">Like</a>
                                         <a href="/{{ article.id }}"
                                            class="btn disabled">{{ article.votes }}</a>
-                                    {% endif %}
                                 </div>
                             </div>
                         </div>
