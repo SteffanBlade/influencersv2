@@ -9,6 +9,7 @@ use App\Controller\UploadController;
 use App\Form\ArticlesType;
 use App\Repository\ArticlesRepository;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -117,6 +118,31 @@ class ArticleController extends AbstractController
 
 
         return $this->render('newArticle.html.twig');
+    }
+    /**
+     * @Route("/edit/{id}", name="edit")
+     */
+    public function edit(Articles $article, Request $request, EntityManagerInterface $em)
+    {
+        $form = $this->createFormBuilder($article)
+            ->add('title', TextareaType::class)
+            ->add('content', TextareaType::class)
+            ->add('save', SubmitType::class, ['label' => 'Create Task'])
+            ->getForm();
+        $form->handleRequest($request);
+        dd($form);
+        if ($form->isSubmitted() && $form->isValid()) {
+            /** @var Articles $article */
+            $article = $form->getData();
+
+            $em->persist($article);
+            $em->flush();
+            $this->addFlash('success', 'Article Created! Knowledge is power!');
+            return $this->redirectToRoute('create' );
+        }
+        return $this->render('edit.html.twig', [
+            'articleForm' => $form->createView()
+        ]);
     }
 
 //    /**
