@@ -34,10 +34,17 @@
                                 <div class="col-6 d-flex justify-content-start inline-block">
                                     <a href="/current/{{ article.id }}" class="btn btn-primary">Read More</a>
                                 </div>
+                                {% if app.request.cookies.has(article.id) %}
                                 <div class="col-6 d-flex justify-content-end inline-block">
-                                        <a href="/{{ article.id }}" class="btn btn-primary">Like</a>
+                                        <a href="/{{ article.id }}" class="btn btn-primary disabled">Like</a>
                                         <a href="/{{ article.id }}"
                                            class="btn disabled">{{ article.votes }}</a>
+                                    {% else %}
+                                    <div class="col-6 d-flex justify-content-end inline-block">
+                                        <a href="/{{ article.id }}" class="btn btn-primary ">Like</a>
+                                        <a href="/{{ article.id }}"
+                                           class="btn disabled">{{ article.votes }}</a>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
@@ -59,18 +66,18 @@
             <!-- Sidebar Widgets Column -->
             <div class="col-md-4">
 
-                <!-- Search Widget -->
-                <div class="card my-4">
-                    <h5 class="card-header">Search</h5>
-                    <div class="card-body">
-                        <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Search for...">
-                            <span class="input-group-append">
-                <button class="btn btn-secondary" type="button">Go!</button>
-              </span>
-                        </div>
-                    </div>
-                </div>
+{#                <!-- Search Widget -->#}
+{#                <div class="card my-4">#}
+{#                    <h5 class="card-header">Search</h5>#}
+{#                    <div class="card-body">#}
+{#                        <div class="input-group">#}
+{#                            <input type="text" class="form-control" placeholder="Search for...">#}
+{#                            <span class="input-group-append">#}
+{#                <button class="btn btn-secondary" type="button">Go!</button>#}
+{#              </span>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
 
                 <!-- Categories Widget -->
                 <div class="card my-4">

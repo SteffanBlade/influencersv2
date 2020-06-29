@@ -11,7 +11,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  *
  * @ORM\Table(name="authors")
  * @ORM\Entity
-
+// * @ORM\Entity(repositoryClass="App/Repository/AuthorsRepository")
  */
 class Authors
 {

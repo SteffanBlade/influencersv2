@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+
+    <div class="container">
+        <form>
+
+
+            <div class="form-group">
+                <label for="title">Title</label>
+                <textarea class="form-control" id="title" name="title" rows="3"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="content">Content</label>
+                <textarea class="form-control" id="content" name="content" rows="3"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="tags">Tags</label>
+                <input type="text" class="form-control" id="tags" name="tags" placeholder="Tag1 Tag2 Tag3 Tag4">
+            </div>
+            <div class="form-group">
+                <label for="image">Image 750x300</label>
+                <input type="file" formmethod="post"  class="form-control-file"  id="image" name="image">
+            </div>
+
+            <button type="submit" formmethod="post" formaction="{{ path('create') }}" formenctype="multipart/form-data" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+
+{% endblock %}
