@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Authors;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use http\Encoding\Stream;
 
 
 class AuthorsRepository extends ServiceEntityRepository  {
@@ -17,9 +18,9 @@ class AuthorsRepository extends ServiceEntityRepository  {
 
 
     /**
-     * @return Authors[]
+     * @return Authors
      */
-    public function findAuthorByNameAndEmail(string $name,string $email):array {
+    public function findAuthorByNameAndEmail(string $name , string $email) {
         $entityManager = $this->getEntityManager();
 //        $query = $entityManager->createQuery(
 //            'SELECT author
@@ -31,13 +32,14 @@ class AuthorsRepository extends ServiceEntityRepository  {
 
 
         $entityManager = $this->getEntityManager();
-       $qb = $entityManager->createQueryBuilder();
+       $qb = $entityManager->createQueryBuilder('author');
         $qb->select('author')
             ->from('App:Authors','author')
             ->where('author.name = :inputName')
             ->andWhere('author.email = :inputEmail')
-            ->set('inputName',$name)
-            ->set('inputEmail',$email);
+            ->setParameter('inputName',$name)
+            ->setParameter('inputEmail',$email);
+
 
         $query = $qb->getQuery();
         return $query->getResult();

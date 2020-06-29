@@ -74,30 +74,41 @@ class ArticleController extends AbstractController
             // if it's not uploaded we dont set it
 
 
-            $author->setName($request->request->get('name'));
-            $author->setEmail($request->request->get('email'));
-            $author->setVotesTo0();
+
 
 //            /** @var AuthorsRepository $repository */
 //            $repository = $this->getDoctrine()->getRepository(Authors::class);
 //
 //            $AuthorId = $repository->findAuthorByNameAndEmail($request->request->get('name'),$request->request->get('email'));
-//
-//            dd($AuthorId);
 
-            $authorID = $repository->findAuthorByNameAndEmail(($request->request->get('name')),$request->request->get('email'));
-            dd($authorID);
+            // Search if an author already exists
+            // if it exist -> set article author to him
+            // if it not exist -> create a new author
+            if($repository->findAuthorByNameAndEmail($request->request->get('name'),$request->request->get('email')) != null){
+                $author = $repository->findAuthorByNameAndEmail($request->request->get('name'),$request->request->get('email'));
+//                dd($authorID[0]);
+                $article->setAuthor($author[0]);
+//                dd($article);
+            }else {
+                $author->setName($request->request->get('name'));
+                $author->setEmail($request->request->get('email'));
+                $author->setVotesTo0();
+                $article->setAuthor($author);
+                $entityManager->persist($author);
+            }
+
+
 
             $article->setTitle($request->request->get('title'));
             $article->setContent($request->request->get('content'));
             $article->setDate(new \datetime());
             $article->setVotesTo0();
             $article->setTags($request->request->get('tags'));
-            $article->setAuthor($author);
+//            dd($article);
 
             $entityManager = $this->getDoctrine()->getManager();
 
-            $entityManager->persist($author);
+
             $entityManager->persist($article);
             $entityManager->flush();
 
