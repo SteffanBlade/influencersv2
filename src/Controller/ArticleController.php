@@ -10,6 +10,7 @@ use App\Form\ArticlesType;
 use App\Repository\ArticlesRepository;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -120,38 +121,39 @@ class ArticleController extends AbstractController
         return $this->render('newArticle.html.twig');
     }
     /**
-     * @Route("/edit/{id}", name="edit")
+     * @Route("/edit/{id}", name="edit", methods={"PUT","GET"})
+     *
      */
-    public function edit(Articles $article, Request $request, EntityManagerInterface $em)
+    public function edit(Request $request, $id)
     {
-        $form = $this->createFormBuilder($article)
-            ->add('title', TextareaType::class)
-            ->add('content', TextareaType::class)
-            ->add('save', SubmitType::class, ['label' => 'Create Task'])
+        $article = new Articles();
+        $article = $this->getDoctrine()
+            ->getRepository(Articles::class)
+            ->find($id);
+
+        $form = $this->createFormBuilder($article,array('method' => 'GET'))  // De ce ma lasa sa fac update with GET si cu PUT nu?
+            ->add('title', TextareaType::class,array('attr'=>array('class'=>'form-control')))
+            ->add('content', TextareaType::class,array('attr'=>array('class'=>'form-control')))
+            ->add('save', SubmitType::class,array('label'=>'Edit','attr'=>array('class'=>'btn btn-primary mt-3')))
             ->getForm();
         $form->handleRequest($request);
-        dd($form);
+//        dd($form->isSubmitted());
+//        dd($form->getErrors(true));
         if ($form->isSubmitted() && $form->isValid()) {
-            /** @var Articles $article */
-            $article = $form->getData();
-
+            $em = $this->getDoctrine()->getManager();
             $em->persist($article);
             $em->flush();
             $this->addFlash('success', 'Article Created! Knowledge is power!');
-            return $this->redirectToRoute('create' );
+            return $this->redirectToRoute('index' );
+        }
+        else{
+           echo 'Form is not submitted';
         }
         return $this->render('edit.html.twig', [
             'articleForm' => $form->createView()
         ]);
     }
 
-//    /**
-//     * @Route("/edit/{id}", name="edit")
-//     */
-//    public function edit(){
-//
-//        return $this->render('indexv3.html.twig');
-//}
 
 
     /**
