@@ -23,7 +23,12 @@
                          alt="Something is not right">
                 {% endif %}
                 <p class="card-text ">{{ article.content }}</p>
-
+                <div class="row card-text mb-3 text-muted">
+                    {% set tags = article.tags|split(' ') %}
+                    {% for tag in tags|slice(0, 10) %}
+                        <div class="col "><a href="/tags/{{ tag }}">{{ tag }}</a></div>
+                    {% endfor %}
+                </div>
                 <div class=" row m-0 ">
                     <div class="col-6 d-flex justify-content-start inline-block">
                         <a href="/" class="btn btn-primary">Back</a>
@@ -43,16 +48,35 @@
                     </div>
                 </div>
                 {% if article.votes == 0 %}
-            <div class="row m-0" >
-                <div class="col d-flex justify-content-center inline-block">
-                    <a href="{{ path('edit', {
-                        id: article.id
-                    }) }}" class="btn btn-primary">Edit</a>
+                <div class="row m-0">
+                    <div class="col d-flex justify-content-center inline-block">
+                        <a href="{{ path('edit', {
+                            id: article.id
+                        }) }}" class="btn btn-primary">Edit</a>
+                    </div>
+                    {% endif %}
                 </div>
-                {% endif %}
-            </div>
             </div>
         </div>
+        <div class="container">
+            <div class="row text-center">
+                <div>Same author</div>
+                {% for article in articlesAuthor %}
+                    <div class="col-4">{{ article.title }}</div>
+                {% endfor %}
+                <br>
+            </div>
+            <div class="row text-center">
+                <div>Same tag</div>
+                {% for article in articlesTags %}
+                    <div class="col">
+                        {{ article.title }}
+                    </div>
+                {% endfor %}
+                <br>
+            </div>
+        </div>
+
     </div>
 {% endblock %}
 

@@ -30,15 +30,15 @@
                             {% endif %}
 
                             <p class="card-text block-with-text">{{ article.content }}</p>
-                            <div class="row card-text mb-3">
+                            <div class="row card-text mb-3 text-muted">
                                 {% set tags = article.tags|split(' ') %}
-                                {% for tag in tags|slice(0, 5) %}
-                                    <div class="col"><a href="/tags/{{ tag }}">{{ tag }}</a></div>
+                                {% for tag in tags|slice(0, 10) %}
+                                    <div class="col "><a href="/tags/{{ tag }}">{{ tag }}</a></div>
                                 {% endfor %}
                             </div>
                             <div class=" row m-0 ">
                                 <div class="col-6 d-flex justify-content-start inline-block">
-                                    <a href="/current/{{ article.id }}" class="btn btn-primary">Read More</a>
+                                    <a href="/current/{{ article.id }}/{{ article.tags }}/{{ article.author.id }}" class="btn btn-primary">Read More</a>
                                 </div>
                                 {% if app.request.cookies.has(article.id) %}
                                 <div class="col-6 d-flex justify-content-end inline-block">

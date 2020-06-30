@@ -205,14 +205,19 @@ class ArticleController extends AbstractController
     }
 
     /**
-     * @Route("/current/{id}")
+     * @Route("/current/{id}/{tag}/{authorId}")
      */
-    public function CurrentArticle($id)
+    public function CurrentArticle($id,$tag,$authorId,ArticlesRepository $articlesRepository)
     {
         $articles = $this->getDoctrine()
             ->getRepository(Articles::class)
             ->find($id);
-        return $this->render('singleArticle.html.twig', array('article' => $articles));
+        $sameTagsArticles = $articlesRepository->findArticleByTag($tag);
+        $sameAuthorArticles = $articlesRepository->findArticleByAuthorId($authorId);
+
+        return $this->render('singleArticle.html.twig', array('article' => $articles,
+                                                            'articlesTags'=>$sameTagsArticles,
+                                                            'articlesAuthor'=>$sameAuthorArticles));
     }
 
     /**
