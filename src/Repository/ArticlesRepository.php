@@ -18,14 +18,34 @@ class ArticlesRepository extends ServiceEntityRepository {
     /**
      * @return Articles[]
      */
-    public function testQuery(){
+    public function findArticleByAuthorId($id) {
         $entityManager = $this->getEntityManager();
-        $query = $entityManager->createQuery(
-            'SELECT p.articlesVotes
-            FROM App\Entity\Articles p
-            where p.articlesVotes > 5'
-        );
-        return $query->getResult();
 
+
+        $entityManager = $this->getEntityManager();
+        $qb = $entityManager->createQueryBuilder('article');
+        $qb->select('articles')
+            ->from('App:Articles','articles')
+            ->where('articles.author = :inputId')
+            ->setParameter('inputId',$id);
+
+
+        $query = $qb->getQuery();
+        return $query->getResult();
     }
+
+    public function findArticleByTag($tag) {
+
+        $entityManager = $this->getEntityManager();
+        $qb = $entityManager->createQueryBuilder('article');
+        $qb->select('articles')
+            ->from('App:Articles','articles')
+            ->where($qb->expr()->like('articles.tags', ':inputTag'))
+            ->setParameter('inputTag','%' . $tag . '%');
+
+        $query = $qb->getQuery();
+        return $query->getResult();
+    }
+
+
 }

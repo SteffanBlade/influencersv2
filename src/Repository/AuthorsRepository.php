@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Articles;
 use App\Entity\Authors;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -44,5 +45,7 @@ class AuthorsRepository extends ServiceEntityRepository  {
         $query = $qb->getQuery();
         return $query->getResult();
     }
+
+
 
 }

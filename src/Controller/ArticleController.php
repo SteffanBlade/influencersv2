@@ -6,6 +6,7 @@ namespace App\Controller;
 use App\Entity\Articles;
 use App\Entity\Authors;
 use App\Controller\UploadController;
+use App\Controller\MailerController;
 use App\Form\ArticlesType;
 use App\Repository\ArticlesRepository;
 
@@ -21,6 +22,8 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Cookie;
 
@@ -47,11 +50,36 @@ class ArticleController extends AbstractController
 
     }
 
+    /**
+     * @Route("/authorsView/{id}",name="authorArticles")
+     * */
+    public function authorsView($id, ArticlesRepository $repository)
+    {
+        $articles = $repository->findArticleByAuthorId($id);
+
+        return $this->render('indexv3.html.twig',
+            array('articles' => $articles)
+        );
+    }
+
+
+    /**
+     * @Route("/tags/{tag}", name = "author")
+     */
+    public function tagsView($tag, ArticlesRepository $repository)
+    {
+        $articles = $repository->findArticleByTag($tag);
+
+        return $this->render('indexv3.html.twig',
+            array('articles' => $articles)
+        );
+    }
+
 
     /**
      * @Route("/new", name="create")
      */
-    public function new(Request $request,AuthorsRepository $repository)
+    public function new(Request $request, AuthorsRepository $repository)
     {
 
         $article = new Articles();
@@ -75,23 +103,13 @@ class ArticleController extends AbstractController
             }
             // if it's not uploaded we dont set it
 
-
-
-
-//            /** @var AuthorsRepository $repository */
-//            $repository = $this->getDoctrine()->getRepository(Authors::class);
-//
-//            $AuthorId = $repository->findAuthorByNameAndEmail($request->request->get('name'),$request->request->get('email'));
-
             // Search if an author already exists
             // if it exist -> set article author to him
             // if it not exist -> create a new author
-            if($repository->findAuthorByNameAndEmail($request->request->get('name'),$request->request->get('email')) != null){
-                $author = $repository->findAuthorByNameAndEmail($request->request->get('name'),$request->request->get('email'));
-//                dd($authorID[0]);
+            if ($repository->findAuthorByNameAndEmail($request->request->get('name'), $request->request->get('email')) != null) {
+                $author = $repository->findAuthorByNameAndEmail($request->request->get('name'), $request->request->get('email'));
                 $article->setAuthor($author[0]);
-//                dd($article);
-            }else {
+            } else {
                 $author->setName($request->request->get('name'));
                 $author->setEmail($request->request->get('email'));
                 $author->setVotesTo0();
@@ -100,13 +118,11 @@ class ArticleController extends AbstractController
             }
 
 
-
             $article->setTitle($request->request->get('title'));
             $article->setContent($request->request->get('content'));
             $article->setDate(new \datetime());
             $article->setVotesTo0();
             $article->setTags($request->request->get('tags'));
-//            dd($article);
 
             $entityManager = $this->getDoctrine()->getManager();
 
@@ -120,40 +136,58 @@ class ArticleController extends AbstractController
 
         return $this->render('newArticle.html.twig');
     }
+
+
     /**
      * @Route("/edit/{id}", name="edit", methods={"PUT","GET"})
      *
      */
-    public function edit(Request $request, $id)
+    public function edit(MailerInterface $mailer, Request $request, $id)
     {
+
+
         $article = new Articles();
         $article = $this->getDoctrine()
             ->getRepository(Articles::class)
             ->find($id);
 
-        $form = $this->createFormBuilder($article,array('method' => 'GET'))  // De ce ma lasa sa fac update with GET si cu PUT nu?
-            ->add('title', TextareaType::class,array('attr'=>array('class'=>'form-control')))
-            ->add('content', TextareaType::class,array('attr'=>array('class'=>'form-control')))
-            ->add('save', SubmitType::class,array('label'=>'Edit','attr'=>array('class'=>'btn btn-primary mt-3')))
+        $random = random_int(1, 100);
+        $email = (new Email())
+            ->from('alienmailer@example.com')
+            ->to($article->author->getEmail())
+            ->subject('Test')
+            ->text("Salutare ! Facem o proba, asta e numaru : $random ");
+        $mailer->send($email);
+
+
+        $form = $this->createFormBuilder($article, array('method' => 'GET'))  // De ce ma lasa sa fac update with GET si cu PUT nu?
+        ->add('title', TextareaType::class, array('attr' => array('class' => 'form-control'), 'required' => true))
+            ->add('content', TextareaType::class, array('attr' => array('class' => 'form-control'), 'required' => true))
+            ->add('save', SubmitType::class, array('label' => 'Edit', 'attr' => array('class' => 'btn btn-primary mt-3')))
             ->getForm();
         $form->handleRequest($request);
-//        dd($form->isSubmitted());
-//        dd($form->getErrors(true));
+
+
         if ($form->isSubmitted() && $form->isValid()) {
+            $checker = $request->request->get('code');
+//                dd($checker);
             $em = $this->getDoctrine()->getManager();
             $em->persist($article);
             $em->flush();
             $this->addFlash('success', 'Article Created! Knowledge is power!');
-            return $this->redirectToRoute('index' );
+            return $this->redirectToRoute('index');
+
+        } else {
+            echo 'Something is wrong';
         }
-        else{
-           echo 'Form is not submitted';
-        }
+
+//        else{
+//           echo 'Form is not submitted';
+//        }
         return $this->render('edit.html.twig', [
             'articleForm' => $form->createView()
         ]);
     }
-
 
 
     /**

@@ -15,7 +15,7 @@
                         <div class="card-footer text-muted m-0 p-0">
                             <div class="card-header row m-0 ">
                                 <div class="col-6 d-flex justify-content-start inline-block">
-                                    {{ article.author.name }}
+                                  <a href="/authorsView/{{ article.author.id }}">{{ article.author.name }}</a>
                                 </div>
                                 <div class="col-6 d-flex justify-content-end inline-block">
                                     {{ article.date|date("Y/m/d") }}
@@ -26,10 +26,16 @@
                         <div class="card-body">
                             <h2 class="card-title text-center">{{ article.title }}</h2>
                                 {% if article.image != null %}
-                                    <img class="card-img-top" src="{{ asset('images/' ~  article.image ) }}" alt="Something is not right">
+                                    <img class="card-img-top" src="{{ asset('images/' ~  article.image ) }}" style="height: 300px; width: 750px" alt="Something is not right">
                             {% endif %}
 
                             <p class="card-text block-with-text">{{ article.content }}</p>
+                            <div class="row card-text mb-3">
+                                {% set tags = article.tags|split(' ') %}
+                                {% for tag in tags|slice(0, 5) %}
+                                    <div class="col"><a href="/tags/{{ tag }}">{{ tag }}</a></div>
+                                {% endfor %}
+                            </div>
                             <div class=" row m-0 ">
                                 <div class="col-6 d-flex justify-content-start inline-block">
                                     <a href="/current/{{ article.id }}" class="btn btn-primary">Read More</a>
