@@ -19,6 +19,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -238,7 +239,8 @@ class ArticleController extends AbstractController
 
 
         if ($cookie->get($articles->getId()) == 1) {
-            return $this->redirectToRoute("index");
+            $likes = ["likes"=>$articles->getVotes()];
+            return new JsonResponse($likes);
         } else {
             $response = new Response();
             $response->headers->setCookie($setCookie);
@@ -250,7 +252,8 @@ class ArticleController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($articles);
             $entityManager->flush();
-            return $this->redirectToRoute('index');
+           $likes = ["likes"=>$articles->getVotes()];
+            return new JsonResponse($likes);
         }
 
     }

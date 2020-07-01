@@ -42,20 +42,44 @@
                                 </div>
                                 {% if app.request.cookies.has(article.id) %}
                                 <div class="col-6 d-flex justify-content-end inline-block">
-                                        <a href="/{{ article.id }}" class="btn btn-primary disabled">Like</a>
-                                        <a href="/{{ article.id }}"
-                                           class="btn disabled">{{ article.votes }}</a>
+                                        <a  class="btn btn-primary " id="likeBtn-{{ article.id }}">Like</a>
+                                        <div class="btn disabled" id="votes-{{ article.id }}">{{ article.votes }}</div>
+
                                     {% else %}
                                     <div class="col-6 d-flex justify-content-end inline-block">
-                                        <a href="/{{ article.id }}" class="btn btn-primary ">Like</a>
-                                        <a href="/{{ article.id }}"
-                                           class="btn disabled">{{ article.votes }}</a>
+                                        <a  class="btn btn-primary " id="likeBtn-{{ article.id }}">Like</a>
+                                        <div  class="btn disabled"   id="votes-{{ article.id }}">{{ article.votes }}</div>
                                     {% endif %}
                                 </div>
                             </div>
                         </div>
                     </div>
-                {% endfor %}
+
+
+                            <script>
+                                $(document).on('click', 'a#likeBtn-{{ article.id }}', function(){
+                                    $.ajax({
+                                        url:'{{ (path('liked',{id:article.id})) }}',
+                                        type: "GET",
+                                        dataType: "json",
+                                        data: {
+                                            "likes": ""
+                                        },
+                                        async: true,
+                                        success: function (data)
+                                        {
+                                            console.log(data)
+                                            $('div#votes-{{ article.id }}').html(data.likes);
+                                            $('#likeBtn-{{ article.id }}').addClass("disabled");
+
+                                        }
+                                    });
+                                    return false;
+
+                                });
+                            </script>
+
+                {% endfor%}
 
                 {#                <!-- Pagination -->#}
                 {#                <ul class="pagination justify-content-center mb-4">#}
@@ -136,4 +160,5 @@
         </div>
         <!-- /.container -->
     </footer>
+
 {% endblock %}
