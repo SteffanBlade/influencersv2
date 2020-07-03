@@ -57,9 +57,9 @@ class Authors
     /**
      * @param int $votes
      */
-    public function setVotes(): void
+    public function setVotes(int $votes): void
     {
-        $this->votes = $this->votes + 1;
+        $this->votes = $this->votes + $votes;
     }
 
     /**

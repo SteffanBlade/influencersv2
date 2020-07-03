@@ -222,9 +222,9 @@ class ArticleController extends AbstractController
     }
 
     /**
-     * @Route("/{id}",name="liked")
+     * @Route("/likeIt/{id}/{value}",name="liked")
      */
-    public function likeIt($id)
+    public function likeIt($id,$value)
     {
         $articles = $this->getDoctrine()
             ->getRepository(Articles::class)
@@ -247,8 +247,8 @@ class ArticleController extends AbstractController
 
             $response->sendHeaders();
 
-            $articles->setVotes();
-            $authors->setVotes();
+            $articles->setVotes($value);
+            $authors->setVotes($value);
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($articles);
             $entityManager->flush();
