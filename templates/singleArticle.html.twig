@@ -35,16 +35,7 @@
                     </div>
                     <div class="col-6 d-flex justify-content-end inline-block">
 
-                        {% if app.request.cookies.has(article.id) %}
-
-                            <a href="/{{ article.id }}" class="btn btn-primary disabled">Like</a>
-
-                            <a href="/{{ article.id }}" class="btn disabled">{{ article.votes }}</a>
-                        {% else %}
-
-                            <a href="/{{ article.id }}" class="btn btn-primary">Like</a>
-                            <a href="/{{ article.id }}" class="btn disabled">{{ article.votes }}</a>
-                        {% endif %}
+                        {% include 'likeScript.html.twig' %}
                     </div>
                 </div>
                 {% if article.votes == 0 %}
@@ -76,5 +67,6 @@
             </div>
         </div>
     </div>
+
 {% endblock %}
 

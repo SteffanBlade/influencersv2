@@ -194,15 +194,37 @@ class ArticleController extends AbstractController
     /**
      * @Route("/ranking",name = "ranking")
      * */
-    public function ranking()
+    public function ranking(ArticlesRepository $articlesRepository)
     {
 
         $authors = $this->getDoctrine()
             ->getRepository(Authors::class)
             ->findBy(array(), array('votes' => 'DESC'));
 
-        return $this->render('ranking.html.twig', array('authors' => $authors),
-            );
+        $count = 0;
+        $count0 = 0;
+
+        $articles = $articlesRepository->findArticleByAuthorId($id);
+
+        foreach ($articles as $article){
+            $count += 1;
+            if ($article->getVotes() == 0){
+                $count0 += 1;
+            }
+            if($count0 < $count/2){
+                $author = $this->getDoctrine()
+                    ->getRepository(Authors::class)
+                    ->find($article->author);
+                for( $i = 0 ;$i<$count0;$i++){
+                    $author->setVotes(-1);
+                }
+
+            }
+    }
+
+
+
+        return $this->render('ranking.html.twig', array('authors' => $authors));
     }
 
     /**
@@ -217,15 +239,18 @@ class ArticleController extends AbstractController
         $sameAuthorArticles = $articlesRepository->findArticleByAuthorId($authorId);
 
         return $this->render('singleArticle.html.twig', array('article' => $articles,
-                                                            'articlesTags'=>$sameTagsArticles,
-                                                            'articlesAuthor'=>$sameAuthorArticles));
+                                                         'articlesTags'=>$sameTagsArticles,
+                                                         'articlesAuthor'=>$sameAuthorArticles));
     }
 
     /**
-     * @Route("/likeIt/{id}/{value}",name="liked")
+     * @Route("/likeIt",name="liked")
      */
-    public function likeIt($id,$value)
+    public function likeIt(Request $request)
     {
+        $id = $request->request->get('id');
+        $value = $request->request->get('value');
+
         $articles = $this->getDoctrine()
             ->getRepository(Articles::class)
             ->find($id);

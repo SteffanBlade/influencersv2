@@ -81,6 +81,15 @@
     "egulias/email-validator": {
         "version": "2.1.18"
     },
+    "friendsofsymfony/jsrouting-bundle": {
+        "version": "2.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "2.3",
+            "ref": "a9f2e49180f75cdc71ae279a929c4b2e0638de84"
+        }
+    },
     "nikic/php-parser": {
         "version": "v4.5.0"
     },
@@ -294,6 +303,9 @@
             "./config/routes.yaml"
         ]
     },
+    "symfony/serializer": {
+        "version": "v5.1.2"
+    },
     "symfony/service-contracts": {
         "version": "v2.1.2"
     },
@@ -353,6 +365,9 @@
     },
     "twig/twig": {
         "version": "v3.0.3"
+    },
+    "willdurand/jsonp-callback-validator": {
+        "version": "v1.1.0"
     },
     "zendframework/zend-code": {
         "version": "3.4.1"

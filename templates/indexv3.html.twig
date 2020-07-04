@@ -26,7 +26,7 @@
                         <div class="card-body">
                             <h2 class="card-title text-center">{{ article.title }}</h2>
                                 {% if article.image != null %}
-                                    <img class="card-img-top" src="{{ asset('images/' ~  article.image ) }}" style="height: 300px; width: 750px" alt="Something is not right">
+                                    <img class="card-img-top" src="{{ asset('images/' ~  article.image ) }}" style="height: 300px; width: 690px" alt="Something is not right">
                             {% endif %}
 
                             <p class="card-text block-with-text">{{ article.content }}</p>
@@ -40,55 +40,14 @@
                                 <div class="col-6 d-flex justify-content-start inline-block">
                                     <a href="/current/{{ article.id }}/{{ article.tags }}/{{ article.author.id }}" class="btn btn-primary">Read More</a>
                                 </div>
-                                {% if app.request.cookies.has(article.id) %}
-
-                                <div class="col-6 d-flex justify-content-end inline-block">
-
-                                    <a  class="btn btn-primary disabled" id="likeBtn-{{ article.id }}">Like</a>
-
-                                        <div class="btn disabled" id="votes-{{ article.id }}">{{ article.votes }} Points</div>
-
-                                    {% else %}
-                                    <div class="col-6 d-flex justify-content-end inline-block">
-                                        <div class="dropdown">
-                                            <select id="vote" name="vote" class="form-control input-md">
-                                                <option selected value="1">5</option>
-                                                <option value="2">4</option>
-                                                <option value="3">3</option>
-                                                <option value="4">2</option>
-                                                <option  value="5">1</option>
-                                            </select>
-                                        </div>
-                                        <a  class="btn btn-primary " id="likeBtn-{{ article.id }}">Like</a>
-                                        <div  class="btn disabled"   id="votes-{{ article.id }}">{{ article.votes }}</div>
-                                    {% endif %}
+                                {% include 'likeScript.html.twig' %}
                                 </div>
                             </div>
                         </div>
                     </div>
 
 
-                            <script>
-                                $(document).on('click', 'a#likeBtn-{{ article.id }}', function(){
-                                    var points = $('#vote option:selected').text();
-                                    $.ajax({
-                                        url:'{{ (path('liked',{id:article.id,value:5})) }}',
-                                        type: "GET",
-                                        dataType: "json",
-                                        data: {
-                                        },
-                                        async: true,
-                                        success: function (data)
-                                        {
-                                            console.log(data)
-                                            console.log(points)
-                                            $('div#votes-{{ article.id }}').html(data.likes);
-                                            $('#likeBtn-{{ article.id }}').addClass("disabled");
-                                        }
-                                    });
-                                    return false;
-                                });
-                            </script>
+
 
                 {% endfor%}
 
