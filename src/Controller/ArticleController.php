@@ -10,8 +10,10 @@ use App\Controller\MailerController;
 use App\Form\ArticlesType;
 use App\Repository\ArticlesRepository;
 
+use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping as ORM;
+use http\Message;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -56,6 +58,7 @@ class ArticleController extends AbstractController
      * */
     public function authorsView($id, ArticlesRepository $repository)
     {
+
         $articles = $repository->findArticleByAuthorId($id);
 
         return $this->render('indexv3.html.twig',
@@ -92,6 +95,7 @@ class ArticleController extends AbstractController
 
             /**@var UploadedFile $uploadedImage */
             $uploadedImage = $request->files->get('image');
+
             // testing if image was uploaded
             if ($uploadedImage != null) {
                 $uploadDirectory = $this->getParameter('kernel.project_dir') . '/public/images';
@@ -107,16 +111,29 @@ class ArticleController extends AbstractController
             // Search if an author already exists
             // if it exist -> set article author to him
             // if it not exist -> create a new author
-            if ($repository->findAuthorByNameAndEmail($request->request->get('name'), $request->request->get('email')) != null) {
-                $author = $repository->findAuthorByNameAndEmail($request->request->get('name'), $request->request->get('email'));
-                $article->setAuthor($author[0]);
-            } else {
-                $author->setName($request->request->get('name'));
-                $author->setEmail($request->request->get('email'));
-                $author->setVotesTo0();
-                $article->setAuthor($author);
-                $entityManager->persist($author);
-            }
+//            try{
+                if ($repository->findAuthorByNameAndEmail($request->request->get('name'), $request->request->get('email')) != null) {
+                    $author = $repository->findAuthorByNameAndEmail($request->request->get('name'), $request->request->get('email'));
+                    $article->setAuthor($author[0]);
+
+                } else {
+                    $author->setName($request->request->get('name'));
+                    $author->setEmail($request->request->get('email'));
+                    $author->setVotesTo0();
+                    $article->setAuthor($author);
+                    $entityManager->persist($author);
+//                    $this->addFlash('success','Article created !');
+                }
+//            }catch(DBALException $e){
+//                $errorMessage = $e->getMessage();
+//
+//            }
+//            catch(\Exception $e){
+//                $errorMessage = $e->getMessage();
+//                $this->addFlash('error','The name and email doesnt match !');
+//            }
+
+
 
 
             $article->setTitle($request->request->get('title'));
@@ -200,6 +217,7 @@ class ArticleController extends AbstractController
         $authors = $this->getDoctrine()
             ->getRepository(Authors::class)
             ->findBy(array(), array('votes' => 'DESC'));
+
 
 
         return $this->render('ranking.html.twig', array('authors' => $authors));

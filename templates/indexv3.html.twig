@@ -1,6 +1,8 @@
 {% extends 'base.html.twig' %}
+
 {% block body %}
-    <div class="container">
+
+    <div class="container pt-5 mt-5">
 
         <div class="row">
 
@@ -10,56 +12,57 @@
 
                 <!-- Blog Post -->
                 {% for article in articles %}
-                    <div class="card mb-4 mt-4">
-                        <div class="card-footer text-muted m-0 p-0">
-                            <div class="card-header row m-0 ">
-                                <div class="col-6 d-flex justify-content-start inline-block">
-                                  <a href="/authorsView/{{ article.author.id }}">{{ article.author.name }}</a>
-                                </div>
-                                <div class="col-6 d-flex justify-content-end inline-block">
-                                    {{ article.date|date("Y/m/d") }}
-                                </div>
+                <div class="card mb-4 mt-4 body">
+                    <div class="card-footer text-muted m-0 p-0">
+                        <div class="card-header row m-0 ">
+                            <div class="col-6 d-flex justify-content-start inline-block">
+                                <a href="/authorsView/{{ article.author.id }}">{{ article.author.name }}</a>
                             </div>
-                        </div>
-
-                        <div class="card-body">
-                            <h2 class="card-title text-center">{{ article.title }}</h2>
-                                {% if article.image != null %}
-                                    <img class="card-img-top" src="{{ asset('images/' ~  article.image ) }}" style="height: 300px; width: 690px" alt="Something is not right">
-                                {% endif %}
-
-                            <p class="card-text block-with-text">{{ article.content }}</p>
-                            <div class="row card-text mb-3 text-muted">
-                                {% set tags = article.tags|split(' ') %}
-                                {% for tag in tags|slice(0, 10) %}
-                                    <div class="col "><a href="/tags/{{ tag }}">{{ tag }}</a></div>
-                                {% endfor %}
-                            </div>
-                            <div class=" row m-0 ">
-                                <div class="col-6 d-flex justify-content-start inline-block">
-                                    <a href="/current/{{ article.id }}/{{ article.tags }}/{{ article.author.id }}" class="btn btn-primary">Read More</a>
-                                </div>
-                                {% include 'likeScript.html.twig' %}
-                                </div>
+                            <div class="col-6 d-flex justify-content-end inline-block">
+                                {{ article.date|date("Y/m/d") }}
                             </div>
                         </div>
                     </div>
 
+                    <div class="card-body">
+                        <h2 class="card-title text-center">{{ article.title }}</h2>
+                        {% if article.image != null %}
+                            <img class="card-img-top rounded mx-auto d-block"
+                                 src="{{ asset('images/' ~  article.image ) }}" style="height: 400px; width: 100%"
+                                 alt="Something is not right">
+                        {% endif %}
 
-
-
-                {% endfor%}
-
-
+                        <p class="card-text block-with-text">{{ article.content }}</p>
+                        <div class="row card-text mb-3 text-muted">
+                            {% set tags = article.tags|split(' ') %}
+                            {% for tag in tags|slice(0, 10) %}
+                                <div class="col "><a href="/tags/{{ tag }}">{{ tag }}</a></div>
+                            {% endfor %}
+                        </div>
+                        <div class=" row m-0 ">
+                            <div class="col-6 d-flex justify-content-start inline-block">
+                                <a href="/current/{{ article.id }}/{{ article.tags }}/{{ article.author.id }}"
+                                   class="btn btn-primary">Read More</a>
+                            </div>
+                            {% include 'likeScript.html.twig' %}
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <!-- Sidebar Widgets Column -->
+
+            {% endfor %}
+
+
+        </div>
+
+        <!-- Sidebar Widgets Column -->
 
         <!-- /.row -->
 
     </div>
     <!-- /.container -->
-</div>
+    </div>
     <!-- Footer -->
     <footer class="py-5 page-footer bg-dark">
         <div class="container">

@@ -3,12 +3,12 @@
 {% block title %}Influencer's Article{% endblock %}
 
 {% block body %}
-    <div class="container mt-4">
+    <div class="container pt-5 mt-5">
         <div class="card mb-4">
             <div class="card-footer text-muted m-0 p-0">
                 <div class="card-header row m-0 ">
                     <div class="col-6 d-flex justify-content-start inline-block">
-                        {{ article.author.name }}
+                        <a href="/authorsView/{{ article.author.id }}">{{ article.author.name }}</a>
                     </div>
                     <div class="col-6 d-flex justify-content-end inline-block">
                         {{ article.date|date("Y/m/d") }}
@@ -17,7 +17,7 @@
             </div>
 
             <div class="card-body">
-                <h2 class="card-title text-center">{{ article.title }}</h2>
+                <h2 class="card-title text-center ">{{ article.title }}</h2>
                 {% if article.image != null %}
                     <img class="card-img-top" src="{{ asset('images/' ~  article.image ) }}"
                          alt="Something is not right">
@@ -34,39 +34,68 @@
                         <a href="/" class="btn btn-primary">Back</a>
                     </div>
                     <div class="col-6 d-flex justify-content-end inline-block">
-
                         {% include 'likeScript.html.twig' %}
                     </div>
                 </div>
+            </div>
                 {% if article.votes == 0 %}
-                <div class="row m-0">
-                    <div class="col d-flex justify-content-center inline-block">
-                        <a href="{{ path('edit', {
-                            id: article.id }) }}" class="btn btn-primary">Edit</a>
-                    </div>
-                    {% endif %}
+            <div class=" row m-0 ">
+                <div class="col-6 d-flex justify-content-end inline-block">
+                    <a href="{{ path('edit', {
+                        id: article.id }) }}" class="btn btn-primary">Edit</a>
+                    <a id="delete" class="btn btn-primary">Delete</a>
                 </div>
+            </div>
+                {% endif %}
             </div>
         </div>
         <div class="container">
-            <div class="row text-center">
-                <div>Same author</div>
+
+                <h3 class="text-center">
+                    Same author
+                </h3>
+
+
+            <div class="row">
                 {% for article in articlesAuthor %}
-                    <div class="col-4">{{ article.title }}</div>
+                    <div class="col-6 d-flex justify-content-center">
+                        <a href="/current/{{ article.id }}/{{ article.tags }}/{{ article.author.id }}">{{ article.title }} - {{ article.votes }} points</a>
+                    </div>
                 {% endfor %}
-                <br>
+                <hr>
             </div>
-            <div class="row text-center">
-                <div>Same tag</div>
+            <h3 class="text-center">
+                Same Tags
+            </h3>
+            <div class="row">
                 {% for article in articlesTags %}
-                    <div class="col">
-                        {{ article.title }}
+                    <div class="col-6 m-auto d-flex justify-content-center ">
+                        <a href="/current/{{ article.id }}/{{ article.tags }}/{{ article.author.id }}">{{ article.title }} - {{ article.votes }} points</a>
                     </div>
                 {% endfor %}
                 <br>
             </div>
         </div>
     </div>
+    <script>
+        $(document).on('click', '#delete', function(){
+            $.ajax({
+                url:'http://localhost/api/articles/{{ article.id }}',
+                type: "DELETE",
+                dataType: "json",
+                data: {
+                },
+                async: true,
+                success: function ()
+                {
+
+                    alert("Deleted");
+                    window.location = '/';
+                }
+            });
+            return false;
+        });
+    </script>
 
 {% endblock %}
 

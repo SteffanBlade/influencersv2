@@ -2,13 +2,14 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
 
 /**
  * Authors
- *
+ * @ApiResource()
  * @ORM\Table(name="authors")
  * @ORM\Entity
  */

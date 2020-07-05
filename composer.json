@@ -6,6 +6,7 @@
         "ext-ctype": "*",
         "ext-gd": "*",
         "ext-iconv": "*",
+        "api-platform/api-pack": "^1.2",
         "friendsofsymfony/jsrouting-bundle": "^2.6",
         "sensio/framework-extra-bundle": "^5.5",
         "symfony/apache-pack": "^1.0",

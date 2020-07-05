@@ -2,12 +2,13 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Articles
- *
+ * @ApiResource()
  * @ORM\Table(name="articles", indexes={@ORM\Index(name="articles_fk", columns={"author"})})
  * @ORM\Entity
  */
