@@ -47,17 +47,17 @@ class Authors
     }
 
     /**
-     * @return int
+     * @return float
      */
-    public function getVotes(): int
+    public function getVotes(): float
     {
         return $this->votes;
     }
 
     /**
-     * @param int $votes
+     * @param float $votes
      */
-    public function setVotes(int $votes): void
+    public function setVotes(float $votes): void
     {
         $this->votes = $this->votes + $votes;
     }
@@ -104,9 +104,9 @@ class Authors
     private $email;
 
     /**
-     * @var int
+     * @var float
      *
-     * @ORM\Column(name="Votes", type="integer", nullable=false)
+     * @ORM\Column(name="Votes", type="float", nullable=false)
      */
     private $votes;
 

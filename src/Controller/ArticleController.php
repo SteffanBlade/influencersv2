@@ -201,28 +201,6 @@ class ArticleController extends AbstractController
             ->getRepository(Authors::class)
             ->findBy(array(), array('votes' => 'DESC'));
 
-        $count = 0;
-        $count0 = 0;
-
-        $articles = $articlesRepository->findArticleByAuthorId($id);
-
-        foreach ($articles as $article){
-            $count += 1;
-            if ($article->getVotes() == 0){
-                $count0 += 1;
-            }
-            if($count0 < $count/2){
-                $author = $this->getDoctrine()
-                    ->getRepository(Authors::class)
-                    ->find($article->author);
-                for( $i = 0 ;$i<$count0;$i++){
-                    $author->setVotes(-1);
-                }
-
-            }
-    }
-
-
 
         return $this->render('ranking.html.twig', array('authors' => $authors));
     }
@@ -230,7 +208,7 @@ class ArticleController extends AbstractController
     /**
      * @Route("/current/{id}/{tag}/{authorId}")
      */
-    public function CurrentArticle($id,$tag,$authorId,ArticlesRepository $articlesRepository)
+    public function CurrentArticle($id, $tag, $authorId, ArticlesRepository $articlesRepository)
     {
         $articles = $this->getDoctrine()
             ->getRepository(Articles::class)
@@ -239,14 +217,14 @@ class ArticleController extends AbstractController
         $sameAuthorArticles = $articlesRepository->findArticleByAuthorId($authorId);
 
         return $this->render('singleArticle.html.twig', array('article' => $articles,
-                                                         'articlesTags'=>$sameTagsArticles,
-                                                         'articlesAuthor'=>$sameAuthorArticles));
+            'articlesTags' => $sameTagsArticles,
+            'articlesAuthor' => $sameAuthorArticles));
     }
 
     /**
      * @Route("/likeIt",name="liked")
      */
-    public function likeIt(Request $request)
+    public function likeIt(Request $request, ArticlesRepository $articlesRepository)
     {
         $id = $request->request->get('id');
         $value = $request->request->get('value');
@@ -254,8 +232,15 @@ class ArticleController extends AbstractController
         $articles = $this->getDoctrine()
             ->getRepository(Articles::class)
             ->find($id);
+
+
         $authorsVariable = $articles->author;
         $authors = $this->getDoctrine()->getRepository(Authors::class)->find($authorsVariable);
+
+
+
+
+
         $request = Request::createFromGlobals();
 
         $setCookie = new Cookie($articles->getId(), 1, time() + 3600);
@@ -264,20 +249,33 @@ class ArticleController extends AbstractController
 
 
         if ($cookie->get($articles->getId()) == 1) {
-            $likes = ["likes"=>$articles->getVotes()];
+            $likes = ["likes" => $articles->getVotes()];
             return new JsonResponse($likes);
         } else {
+
             $response = new Response();
             $response->headers->setCookie($setCookie);
 
             $response->sendHeaders();
 
             $articles->setVotes($value);
-            $authors->setVotes($value);
+
+            // ranking algorithm
+            $count0 = 0;
+            foreach ($articles as $article) {
+                if ($article->getVotes() == 0) {
+                    $count0 += 1;
+                }
+            }
+            $authorVotesValue = $value - $count0 * 0.25 * $value;
+            $authors->setVotes($authorVotesValue);
+
+            //push to db
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($articles);
             $entityManager->flush();
-           $likes = ["likes"=>$articles->getVotes()];
+
+            $likes = ["likes" => $articles->getVotes()];
             return new JsonResponse($likes);
         }
 

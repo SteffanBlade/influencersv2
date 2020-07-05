@@ -8,12 +8,10 @@ use Doctrine\Persistence\ManagerRegistry;
 
 class ArticlesRepository extends ServiceEntityRepository {
 
-
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Articles::class);
     }
-
 
     /**
      * @return Articles[]
@@ -32,6 +30,7 @@ class ArticlesRepository extends ServiceEntityRepository {
 
         $query = $qb->getQuery();
         return $query->getResult();
+
     }
 
     public function findArticleByTag($tag) {
@@ -45,7 +44,7 @@ class ArticlesRepository extends ServiceEntityRepository {
 
         $query = $qb->getQuery();
         return $query->getResult();
-    }
 
+    }
 
 }
