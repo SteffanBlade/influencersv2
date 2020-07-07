@@ -22,6 +22,7 @@
         <div  class="btn disabled"   id="votes-{{ article.id }}">{{ article.votes }} Points</div>
         {% endif %}
        {% endblock %}
+
 <script>
     $(document).on('click', 'a#likeBtn-{{ article.id }}', function(){
         var points = $('#vote-{{ article.id }}').val();

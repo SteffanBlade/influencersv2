@@ -191,8 +191,8 @@ class ArticleController extends AbstractController
         $checker = $form->get('code')->getData();
 
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            dd($random == $checker);
+        if ($form->isSubmitted() && $form->isValid() && $random == $checker) {
+//            dd($random == $checker);
             $em = $this->getDoctrine()->getManager();
             $em->persist($article);
             $em->flush();
@@ -278,23 +278,16 @@ class ArticleController extends AbstractController
             $response->sendHeaders();
             $articles->setVotes($value);
             $allArticles = $articlesRepository->findArticleByAuthorId($id);
-//            dd($articles);
+
             // ranking algorithm
-//            dd($request);
+
             $count0 = 0;
             foreach ($allArticles as $article) {
-
                 if ($article->getVotes() == 0)
                 {
                     $count0 = $count0 + 1;
-
-//
                 }
             }
-//            dd($count0);
-
-
-
             $authorVotesValue = $value - $count0 * 0.25 * $value;
             $authors->setVotes($authorVotesValue);
 
