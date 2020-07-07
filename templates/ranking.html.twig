@@ -20,7 +20,7 @@
             <tr>
 
                 <td><a href="/authorsView/{{ author.id }}">{{ author.name }}</a></td>
-                <td>{{ author.votes }}</td>
+                <td>{{ author.votes|number_format(2) }}</td>
 
             </tr>
         {% endfor %}

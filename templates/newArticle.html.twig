@@ -2,6 +2,20 @@
 {% block body %}
 
     <div class="container pt-5 mt-5 text-center">
+
+        {% for flashMessage in app.session.flashbag.get('success') %}
+            <div class="alert alert-success">
+                {{ flashMessage }}
+            </div>
+        {% endfor %}
+
+            {% for flashMessage in app.session.flashbag.get('error') %}
+                <div class="alert alert-danger">
+                    {{ flashMessage }}
+                </div>
+            {% endfor %}
+
+
     <form>
         <div class="row">
         <div class="form-group col-6">
@@ -33,5 +47,7 @@
         <button type="submit" formmethod="post" formaction="{{ path('create') }}" formenctype="multipart/form-data" class="btn btn-primary">Submit</button>
     </form>
     </div>
+
+
 
 {% endblock %}

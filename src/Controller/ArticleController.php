@@ -11,11 +11,15 @@ use App\Form\ArticlesType;
 use App\Repository\ArticlesRepository;
 
 use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
+use Doctrine\DBAL\Types\IntegerType;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping as ORM;
 use http\Message;
+use phpDocumentor\Reflection\Types\Integer;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -111,7 +115,7 @@ class ArticleController extends AbstractController
             // Search if an author already exists
             // if it exist -> set article author to him
             // if it not exist -> create a new author
-//            try{
+            try{
                 if ($repository->findAuthorByNameAndEmail($request->request->get('name'), $request->request->get('email')) != null) {
                     $author = $repository->findAuthorByNameAndEmail($request->request->get('name'), $request->request->get('email'));
                     $article->setAuthor($author[0]);
@@ -122,20 +126,8 @@ class ArticleController extends AbstractController
                     $author->setVotesTo0();
                     $article->setAuthor($author);
                     $entityManager->persist($author);
-//                    $this->addFlash('success','Article created !');
-                }
-//            }catch(DBALException $e){
-//                $errorMessage = $e->getMessage();
 //
-//            }
-//            catch(\Exception $e){
-//                $errorMessage = $e->getMessage();
-//                $this->addFlash('error','The name and email doesnt match !');
-//            }
-
-
-
-
+                }
             $article->setTitle($request->request->get('title'));
             $article->setContent($request->request->get('content'));
             $article->setDate(new \datetime());
@@ -145,10 +137,18 @@ class ArticleController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
 
 
+
             $entityManager->persist($article);
             $entityManager->flush();
 
-            return $this->render('newArticle.html.twig');
+                $this->addFlash('success','Article created ! ');
+
+            }catch(UniqueConstraintViolationException $e){
+                $errorMessage = $e->getMessage();
+                $this->addFlash('error','The name and email doesnt match ! 
+                 Please enter a valid combination !');
+            }
+
         }
 
 
@@ -169,7 +169,8 @@ class ArticleController extends AbstractController
             ->getRepository(Articles::class)
             ->find($id);
 
-        $random = random_int(1, 100);
+//        $random = random_int(1, 100);
+        $random = 1 ;
         $email = (new Email())
             ->from('alienmailer@example.com')
             ->to($article->author->getEmail())
@@ -181,27 +182,25 @@ class ArticleController extends AbstractController
         $form = $this->createFormBuilder($article, array('method' => 'GET'))  // De ce ma lasa sa fac update with GET si cu PUT nu?
         ->add('title', TextareaType::class, array('attr' => array('class' => 'form-control'), 'required' => true))
             ->add('content', TextareaType::class, array('attr' => array('class' => 'form-control'), 'required' => true))
+            ->add('code',\Symfony\Component\Form\Extension\Core\Type\IntegerType::class, array('mapped' => false))
             ->add('save', SubmitType::class, array('label' => 'Edit', 'attr' => array('class' => 'btn btn-primary mt-3')))
+
             ->getForm();
         $form->handleRequest($request);
 
+        $checker = $form->get('code')->getData();
+
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $checker = $request->request->get('code');
-//                dd($checker);
+            dd($random == $checker);
             $em = $this->getDoctrine()->getManager();
             $em->persist($article);
             $em->flush();
-            $this->addFlash('success', 'Article Created! Knowledge is power!');
+            $this->addFlash('success', 'Article Created!');
             return $this->redirectToRoute('index');
-
-        } else {
-            echo 'Something is wrong';
         }
 
-//        else{
-//           echo 'Form is not submitted';
-//        }
+
         return $this->render('edit.html.twig', [
             'articleForm' => $form->createView()
         ]);
@@ -275,16 +274,25 @@ class ArticleController extends AbstractController
             $response->headers->setCookie($setCookie);
 
             $response->sendHeaders();
-
             $articles->setVotes($value);
-
+            $allArticles = $articlesRepository->findArticleByAuthorId($id);
+//            dd($articles);
             // ranking algorithm
+//            dd($request);
             $count0 = 0;
-            foreach ($articles as $article) {
-                if ($article->getVotes() == 0) {
-                    $count0 += 1;
+            foreach ($allArticles as $article) {
+
+                if ($article->getVotes() == 0)
+                {
+                    $count0 = $count0 + 1;
+
+//
                 }
             }
+//            dd($count0);
+
+
+
             $authorVotesValue = $value - $count0 * 0.25 * $value;
             $authors->setVotes($authorVotesValue);
 

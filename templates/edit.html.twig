@@ -4,11 +4,6 @@
     <div class="container text-center mt-5">
         <h1>Change it !</h1>
         <form>
-            <div class="container mt-3">
-                <h3>Hey ! I send you an email with a code ! Paste it bellow please !</h3>
-                <label for="code"></label>
-                <input type="text" class="form-control " name="code" id="code">
-            </div>
             {{ form_start(articleForm, {'method': 'PUT'}) }}
             {{ form_row(articleForm.title,
                 {label: 'Article title' }) }}

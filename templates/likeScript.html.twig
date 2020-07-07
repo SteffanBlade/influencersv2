@@ -37,8 +37,8 @@
             async: true,
             success: function (data)
             {
-                console.log(data)
-                console.log(points)
+
+
                 $('div#votes-{{ article.id }}').html(data.likes + ' Points');
                 $('#likeBtn-{{ article.id }}').hide();
                 $('#vote-{{ article.id }}').hide();
