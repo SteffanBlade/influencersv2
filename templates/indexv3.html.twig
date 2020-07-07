@@ -2,19 +2,29 @@
 
 {% block body %}
 
+    <header class="masthead">
+        <div class="container h-100">
+            <div class="row h-100 align-items-center">
+                <div class="col-12 text-center">
+
+                </div>
+            </div>
+        </div>
+    </header>
+
     <div class="container pt-5 mt-5">
 
         <div class="row">
 
             <!-- Blog Entries Column -->
-            <div class="col-md-10">
+            <div class="col-md-12">
 
 
                 <!-- Blog Post -->
                 {% for article in articles %}
                 <div class="card mb-4 mt-4 body">
                     <div class="card-footer text-muted m-0 p-0">
-                        <div class="card-header row m-0 ">
+                        <div class="card-header row m-0 navbar-light bg-light shadow">
                             <div class="col-6 d-flex justify-content-start inline-block">
                                 <a href="/authorsView/{{ article.author.id }}">{{ article.author.name }}</a>
                             </div>
@@ -35,14 +45,16 @@
                         <p class="card-text block-with-text">{{ article.content }}</p>
                         <div class="row card-text mb-3 text-muted">
                             {% set tags = article.tags|split(' ') %}
-                            {% for tag in tags|slice(0, 10) %}
-                                <div class="col "><a href="/tags/{{ tag }}">{{ tag }}</a></div>
+                            {% for tag in tags|slice(0, 6) %}
+                                <div class="col ">
+                                    <a class="text-primary" href="/tags/{{ tag }}">{{ tag }}</a>
+                                </div>
                             {% endfor %}
                         </div>
                         <div class=" row m-0 ">
                             <div class="col-6 d-flex justify-content-start inline-block">
                                 <a href="/current/{{ article.id }}/{{ article.tags }}/{{ article.author.id }}"
-                                   class="btn btn-primary">Read More</a>
+                                   class="btn btn-outline-dark my-2 my-sm-0">Read More</a>
                             </div>
                             {% include 'likeScript.html.twig' %}
                         </div>

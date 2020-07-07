@@ -145,7 +145,7 @@ class ArticleController extends AbstractController
 
             }catch(UniqueConstraintViolationException $e){
                 $errorMessage = $e->getMessage();
-                $this->addFlash('error','The name and email doesnt match ! 
+                $this->addFlash('error','The name and email does not match ! 
                  Please enter a valid combination !');
             }
 
@@ -220,6 +220,8 @@ class ArticleController extends AbstractController
 
 
         return $this->render('ranking.html.twig', array('authors' => $authors));
+
+
     }
 
     /**
