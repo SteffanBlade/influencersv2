@@ -1,8 +1,8 @@
 {% extends 'base.html.twig' %}
 {% block body %}
 
-    <div class="container text-center mt-5">
-        <h1>Change it !</h1>
+    <div class="container text-center mt-5 pt-5">
+        <h1 class="mt-5">Change it !</h1>
         <form>
             {{ form_start(articleForm, {'method': 'PUT'}) }}
             {{ form_row(articleForm.title,
