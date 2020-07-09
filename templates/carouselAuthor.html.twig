@@ -1,0 +1,86 @@
+{% block carousel  %}
+{#    carousel for author articles#}
+<div class="container text-center my-3">
+    <h2 class="font-weight-light">Same Author</h2>
+    <div class="row mx-auto my-auto">
+        <div id="recipeCarousel" class="carousel slide w-100" data-ride="carousel">
+            <div class="carousel-inner w-100" role="listbox">
+
+
+
+
+                <div class="carousel-item active">
+                </div>
+
+
+
+                {% for article in articlesAuthor %}
+                    <div class="carousel-item">
+                        <div class="col-md-4">
+                            <div class="card card-body">
+
+                                <div class="card-header row m-0 navbar-light bg-light shadow">
+                                    <div class="col-6 d-flex justify-content-start inline-block">
+                                        <a href="/authorsView/{{ article.author.id }}">{{ article.author.name }}</a>
+                                    </div>
+                                    <div class="col-6 d-flex justify-content-end inline-block">
+                                        {{ article.date|date("Y/m/d") }}
+                                    </div>
+                                </div>
+
+                                <h6 class="card-title text-center mt-3">
+                                    <a href="/current/{{ article.id }}/{{ article.tags }}/{{ article.author.id }}"
+                                    >{{ article.title }}</a>
+                                </h6>
+
+                                <p class="card-text block-with-text ">
+
+                                    {{ article.content }}
+                                </p>
+
+
+                                <div class="row card-text mb-3 text-muted">
+                                    {% set tags = article.tags|split(' ') %}
+                                    {% for tag in tags|slice(0, 3) %}
+                                        <div class="col "><a class="text-primary" href="/tags/{{ tag }}">{{ tag }}</a></div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+
+
+
+
+
+
+            </div>
+            <a class="carousel-control-prev w-auto" href="#recipeCarousel" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon bg-dark border border-dark rounded-circle" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next w-auto" href="#recipeCarousel" role="button" data-slide="next">
+                <span class="carousel-control-next-icon bg-dark border border-dark rounded-circle" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
+        </div>
+    </div>
+{% endblock %}
+    <script>
+        $(document).on('click', '#delete', function () {
+            $.ajax({
+                url: 'http://localhost/api/articles/{{ article.id }}',
+                type: "DELETE",
+                dataType: "json",
+                data: {},
+                async: true,
+                success: function () {
+
+                    alert("Deleted");
+                    window.location = '/';
+                }
+            });
+            return false;
+        });
+    </script>

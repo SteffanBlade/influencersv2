@@ -3,159 +3,177 @@
 {% block title %}Influencer's Article{% endblock %}
 
 {% block body %}
-<div class="container pt-5 mt-5" >
-    <div class="card mb-4">
-        <div class="card-footer text-muted m-0 p-0">
-            <div class="card-header row m-0 navbar-light bg-light shadow">
-                <div class="col-6 d-flex justify-content-start inline-block">
-                    <a href="/authorsView/{{ article.author.id }}">{{ article.author.name }}</a>
-                </div>
-                <div class="col-6 d-flex justify-content-end inline-block">
-                    {{ article.date|date("Y/m/d") }}
-                </div>
-            </div>
-        </div>
-
-        <div class="card-body">
-            <h2 class="card-title text-center ">{{ article.title }}</h2>
-            {% if article.image != null %}
-                <img class="card-img-top mb-3 rounded mx-auto" src="{{ asset('images/' ~  article.image ) }}"
-                     alt="Something is not right">
-            {% endif %}
-            <p class="card-text ">{{ article.content }}</p>
-            <div class="row card-text mb-3 text-muted">
-                {% set tags = article.tags|split(' ') %}
-                {% for tag in tags|slice(0, 10) %}
-                    <div class="col "><a href="/tags/{{ tag }}">{{ tag }}</a></div>
-                {% endfor %}
-            </div>
-            <div class=" row m-0 ">
-                <div class="col-6 d-flex justify-content-start inline-block">
-                    <a href="/" class="btn btn-outline-dark my-2 my-sm-0">Back</a>
-                </div>
-                <div class="col-6 d-flex justify-content-end inline-block">
-                    {% include 'likeScript.html.twig' %}
+    <link rel="stylesheet" href="{{ asset('css/mycss.css') }}">
+    <div class="container pt-5 mt-5">
+        <div class="card mb-4">
+            <div class="card-footer text-muted m-0 p-0">
+                <div class="card-header row m-0 navbar-light bg-light shadow">
+                    <div class="col-6 d-flex justify-content-start inline-block">
+                        <a href="/authorsView/{{ article.author.id }}">{{ article.author.name }}</a>
+                    </div>
+                    <div class="col-6 d-flex justify-content-end inline-block">
+                        {{ article.date|date("Y/m/d") }}
+                    </div>
                 </div>
             </div>
-        </div>
-        {% if article.votes == 0 %}
-            <div class=" row m-0 ">
-                <div class="col-6 d-flex justify-content-end inline-block">
-                    <a href="{{ path('edit', {
-                        id: article.id }) }}" class="btn btn-outline-dark my-2 my-sm-0">Edit</a>
-                    <a id="delete" class="btn btn-outline-dark my-2 my-sm-0 ml-3">Delete</a>
+
+            <div class="card-body">
+                <h2 class="card-title text-center ">{{ article.title }}</h2>
+                {% if article.image != null %}
+                    <img class="card-img-top mb-3 rounded mx-auto" src="{{ asset('images/' ~  article.image ) }}"
+                         alt="Something is not right">
+                {% endif %}
+                <p class="card-text ">{{ article.content }}</p>
+                <div class="row card-text mb-3 text-muted">
+                    {% set tags = article.tags|split(' ') %}
+                    {% for tag in tags|slice(0, 10) %}
+                        <div class="col "><a href="/tags/{{ tag }}">{{ tag }}</a></div>
+                    {% endfor %}
+                </div>
+                <div class=" row m-0 ">
+                    <div class="col-6 d-flex justify-content-start inline-block">
+                        <a href="/" class="btn btn-outline-dark my-2 my-sm-0">Back</a>
+                    </div>
+                    <div class="col-6 d-flex justify-content-end inline-block">
+                        {% include 'likeScript.html.twig' %}
+                    </div>
                 </div>
             </div>
-        {% endif %}
-    </div>
-</div>
-<div class="container">
+            {#        <div> {{ article.author.email|replace({'@':'%40'}) }}</div>#}
+            {#        <div> {{ dump(app.request.cookies) }}</div>#}
 
-    <h3 class="text-center">
-        Same author
-    </h3>
+            {% if app.request.cookies.has(article.author.email|replace({'.':'_'})) %}
 
-
-    <div class="row ">
-        {% for article in articlesAuthor|slice(0, 3) %}
-            <div class="col ">
-                <div class="card mb-4 mt-4 body small-card" style="height: 200px;width: 250px ;font-size: 0.8rem">
-                    <div class="card-header row m-0 navbar-light bg-light shadow">
-                        <div class="col-6 d-flex justify-content-start inline-block">
-                            <a href="/authorsView/{{ article.author.id }}">{{ article.author.name }}</a>
-                        </div>
+                {% if article.votes == 0 %}
+                    <div class=" row m-0 ">
                         <div class="col-6 d-flex justify-content-end inline-block">
-                            {{ article.date|date("Y/m/d") }}
+                            <a href="{{ path('edit', {
+                                id: article.id }) }}" class="btn btn-outline-dark my-2 my-sm-0">Edit</a>
+                            <a id="delete" class="btn btn-outline-dark my-2 my-sm-0 ml-3">Delete</a>
                         </div>
                     </div>
+                {% endif %}
 
-                    <div class="card-body">
-                        <h6 class="card-title text-center"><a href="/current/{{ article.id }}/{{ article.tags }}/{{ article.author.id }}"
-                            >{{ article.title }}</a></h6>
-                        <p class="card-text "
-                           style="    overflow: hidden;
-                                        display: -webkit-box;
-                                        -webkit-line-clamp: 3;
-                                        -webkit-box-orient: vertical;">
-                            {{ article.content }}
-                        </p>
-                        <div class="row card-text mb-3 text-muted">
-                            {% set tags = article.tags|split(' ') %}
-                            {% for tag in tags|slice(0, 3) %}
-                                <div class="col "><a class="text-primary" href="/tags/{{ tag }}">{{ tag }}</a></div>
-                            {% endfor %}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        {% endfor %}
-
-        <hr>
+            {% endif %}
+        </div>
     </div>
 
-    <h3 class="text-center">
-        Same Tags
-    </h3>
 
 
-    <div class="row ">
-        {% for article in articlesTags|slice(0, 3) %}
-            <div class="col ">
-                <div class="card mb-4 mt-4 body small-card" style="height: 200px;width: 250px ;font-size: 0.8rem">
-                    <div class="card-footer text-muted m-0 p-0">
-                        <div class="card-header row m-0 navbar-light bg-light shadow">
-                            <div class="col-12 d-flex justify-content-center inline-block">
-                                {{ article.date|date("Y/m/d") }}
+{#    carousel for author articles#}
+    <div class="container text-center my-3">
+        <h2 class="font-weight-light">Related</h2>
+        <div class="row mx-auto my-auto">
+            <div id="recipeCarousel" class="carousel slide w-110" data-ride="carousel">
+                <div class="carousel-inner w-100" role="listbox">
+
+
+
+
+                    <div class="carousel-item active">
+                    </div>
+
+
+
+                    {% for article in articlesAuthor %}
+                    <div class="carousel-item">
+                        <div class="col-md-4">
+                            <div class="card card-body">
+
+                                <div class="card-header row m-0 navbar-light bg-light shadow">
+                                    <div class="col-6 d-flex justify-content-start inline-block">
+                                        <a href="/authorsView/{{ article.author.id }}">{{ article.author.name }}</a>
+                                    </div>
+                                    <div class="col-6 d-flex justify-content-end inline-block">
+                                        {{ article.date|date("Y/m/d") }}
+                                    </div>
+                                </div>
+
+                                <h6 class="card-title text-center mt-3">
+                                    <a href="/current/{{ article.id }}/{{ article.tags }}/{{ article.author.id }}"
+                                    >{{ article.title }}</a>
+                                </h6>
+
+                                <p class="card-text block-with-text ">
+
+                                    {{ article.content }}
+                                </p>
+
+
+                                <div class="row card-text mb-3 text-muted">
+                                    {% set tags = article.tags|split(' ') %}
+                                    {% for tag in tags|slice(0, 3) %}
+                                        <div class="col "><a class="text-primary" href="/tags/{{ tag }}">{{ tag }}</a></div>
+                                    {% endfor %}
+                                </div>
                             </div>
                         </div>
                     </div>
+                    {% endfor %}
 
-                    <div class="card-body">
-                        <h6 class="card-title text-center">
 
-                            <a href="/current/{{ article.id }}/{{ article.tags }}/{{ article.author.id }}"
-                              >{{ article.title }}</a>
-                        </h6>
-                        <p class="card-text "
-                           style="    overflow: hidden;
-                                        display: -webkit-box;
-                                        -webkit-line-clamp: 3;
-                                        -webkit-box-orient: vertical;">
-                            {{ article.content }}
-                        </p>
-                        <div class="row card-text mb-3 text-muted">
-                            {% set tags = article.tags|split(' ') %}
-                            {% for tag in tags|slice(0, 3) %}
-                                <div class="col "><a class="text-primary" href="/tags/{{ tag }}">{{ tag }}</a></div>
-                            {% endfor %}
-                        </div>
-
-                    </div>
                 </div>
+                <a class="carousel-control-prev w-auto" href="#recipeCarousel" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon bg-dark border border-dark rounded-circle" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next w-auto" href="#recipeCarousel" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon bg-dark border border-dark rounded-circle" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </a>
             </div>
-        {% endfor %}
-                        <br>
-                    </div>
-                </div>
-            </div>
+        </div>
 
-            <script>
-                $(document).on('click', '#delete', function () {
-                    $.ajax({
-                        url: 'http://localhost/api/articles/{{ article.id }}',
-                        type: "DELETE",
-                        dataType: "json",
-                        data: {},
-                        async: true,
-                        success: function () {
 
-                            alert("Deleted");
-                            window.location = '/';
-                        }
-                    });
-                    return false;
-                });
-            </script>
 
-            {% endblock %}
+
+
+
+
+    <script>
+        $(document).on('click', '#delete', function () {
+            $.ajax({
+                url: 'http://localhost/api/articles/{{ article.id }}',
+                type: "DELETE",
+                dataType: "json",
+                data: {},
+                async: true,
+                success: function () {
+
+                    alert("Deleted");
+                    window.location = '/';
+                }
+            });
+            return false;
+        });
+    </script>
+
+
+    <script>
+        $('#recipeCarousel').carousel({
+            interval: 10000
+        })
+
+        $('.carousel .carousel-item').each(function () {
+            var minPerSlide = 3;
+            var next = $(this).next();
+            if (!next.length) {
+                next = $(this).siblings(':first');
+            }
+            next.children(':first-child').clone().appendTo($(this));
+
+            for (var i = 0; i < minPerSlide; i++) {
+                next = next.next();
+                if (!next.length) {
+                    next = $(this).siblings(':first');
+                }
+
+                next.children(':first-child').clone().appendTo($(this));
+            }
+        });
+
+    </script>
+
+
+{% endblock %}
 

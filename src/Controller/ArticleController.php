@@ -120,19 +120,31 @@ class ArticleController extends AbstractController
                     $author = $repository->findAuthorByNameAndEmail($request->request->get('name'), $request->request->get('email'));
                     $article->setAuthor($author[0]);
 
+
                 } else {
                     $author->setName($request->request->get('name'));
                     $author->setEmail($request->request->get('email'));
                     $author->setVotesTo0();
+
+                    $setCookie = new Cookie($author->getEmail(),1, time() + 3600);
+                    $response = new Response();
+                    $response->headers->setCookie($setCookie);
+                    $response->sendHeaders();
+
+
                     $article->setAuthor($author);
                     $entityManager->persist($author);
-//
+
+
                 }
+
             $article->setTitle($request->request->get('title'));
             $article->setContent($request->request->get('content'));
             $article->setDate(new \datetime());
             $article->setVotesTo0();
             $article->setTags($request->request->get('tags'));
+
+
 
             $entityManager = $this->getDoctrine()->getManager();
 

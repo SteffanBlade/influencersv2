@@ -47,12 +47,12 @@
                             {% set tags = article.tags|split(' ') %}
                             {% for tag in tags|slice(0, 6) %}
                                 <div class="col ">
-                                    <a class="text-primary" href="/tags/{{ tag }}">{{ tag }}</a>
+                                    <a class="text-primary "  href="/tags/{{ tag }}">{{ tag }}</a>
                                 </div>
                             {% endfor %}
                         </div>
                         <div class=" row m-0 ">
-                            <div class="col-6 d-flex justify-content-start inline-block">
+                            <div class="col-6 d-flex justify-content-start inline-block"  style="height: 40px">
                                 <a href="/current/{{ article.id }}/{{ article.tags }}/{{ article.author.id }}"
                                    class="btn btn-outline-dark my-2 my-sm-0">Read More</a>
                             </div>

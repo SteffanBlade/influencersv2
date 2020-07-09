@@ -1,31 +1,52 @@
 {% block like %}
 {% if app.request.cookies.has(article.id) %}
 
-<div class="col-6 d-flex justify-content-end inline-block">
+<div class="col-6 d-flex justify-content-end inline-block" >
 
 
 
-    <div class="btn disabled" id="votes-{{ article.id }}">{{ article.votes }} Points</div>
+    <div class="btn disabled" style="width: 150px" id="votes-{{ article.id }}">{{ article.votes }} Points</div>
 
     {% else %}
-    <div class="col-6 d-flex justify-content-end inline-block">
-        <div class="dropdown">
-            <select  name="vote" id="vote-{{ article.id }}" class="form-control input-md vote">
-                <option value="5">5</option>
-                <option value="4">4</option>
-                <option value="3">3</option>
-                <option value="2">2</option>
-                <option value="1">1</option>
-            </select>
+    <div class="col-6 d-flex justify-content-end inline-block mb-0" style="height: 40px">
+        <div class="form-group">
+{#            <select  name="vote" id="vote-{{ article.id }}" class="form-control input-md vote">#}
+{#                <option value="5">5</option>#}
+{#                <option value="4">4</option>#}
+{#                <option value="3">3</option>#}
+{#                <option value="2">2</option>#}
+{#                <option value="1">1</option>#}
+{#            </select>#}
+            <div class="rating pt-2" id="vote-{{ article.id }}" style="width: 150px">
+
+                <label>
+                    <input type="radio" name="rating" value="5" title="5 stars"> 5
+                </label>
+                <label>
+                    <input type="radio" name="rating" value="4" title="4 stars"> 4
+                </label>
+                <label>
+                    <input type="radio" name="rating" value="3" title="3 stars"> 3
+                </label>
+                <label>
+                    <input type="radio" name="rating" value="2" title="2 stars"> 2
+                </label>
+                <label>
+                    <input type="radio" name="rating" value="1" title="1 star"> 1
+                </label>
+
+            </div>
         </div>
-        <a  class="btn btn-outline-dark my-2 my-sm-0 ml-1" id="likeBtn-{{ article.id }}">Vote!</a>
-        <div  class="btn disabled"   id="votes-{{ article.id }}">{{ article.votes }} Points</div>
+        <a  class="btn btn-outline-dark my-2 my-sm-0 ml-1 mb-0 pb-0" id="likeBtn-{{ article.id }}">Vote!</a>
+        <div  class="btn disabled ml-1"  style="width: 150px"   id="votes-{{ article.id }}">{{ article.votes }} Points</div>
         {% endif %}
+
+
        {% endblock %}
 
 <script>
     $(document).on('click', 'a#likeBtn-{{ article.id }}', function(){
-        var points = $('#vote-{{ article.id }}').val();
+        var points = $('input[name="rating"]:checked').val();
         console.log(points);
         $.ajax({
             url:'{{ (path('liked')) }}',
@@ -46,3 +67,10 @@
         return false;
     });
 </script>
+        <script>
+            $('.rating input').change(function () {
+                var $radio = $(this);
+                $('.rating .selected').removeClass('selected');
+                $radio.closest('label').addClass('selected');
+            });
+        </script>
