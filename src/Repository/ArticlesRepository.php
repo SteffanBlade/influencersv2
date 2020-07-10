@@ -47,4 +47,18 @@ class ArticlesRepository extends ServiceEntityRepository {
 
     }
 
+    public function findArticleByContent($content) {
+
+        $entityManager = $this->getEntityManager();
+        $qb = $entityManager->createQueryBuilder('article');
+        $qb->select('articles')
+            ->from('App:Articles','articles')
+            ->where($qb->expr()->like('articles.content', ':inputContent'))
+            ->setParameter('inputContent', '%' . $content . '%' );
+
+        $query = $qb->getQuery();
+        return $query->getResult();
+
+    }
+
 }

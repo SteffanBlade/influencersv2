@@ -57,6 +57,8 @@ class ArticleController extends AbstractController
 
     }
 
+
+
     /**
      * @Route("/authorsView/{id}",name="authorArticles")
      * */
@@ -314,5 +316,19 @@ class ArticleController extends AbstractController
 
     }
 
+
+    /**
+     * @Route("/search/{value}",name="search")
+     * */
+    public function Value($value,ArticlesRepository $articlesRepository)
+    {
+
+        $articles = $articlesRepository->findArticleByContent($value);
+
+        return $this->render('indexv3.html.twig',
+            array('articles' => $articles)
+        );
+
+    }
 
 }

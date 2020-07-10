@@ -11,11 +11,13 @@
 .masthead {
     height: 100vh;
     min-height: 500px;
-    background-image: url('https://images.unsplash.com/photo-1455849318743-b2233052fcff?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80');
+    background-image: url('https://images.unsplash.com/photo-1542435503-956c469947f6?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=667&q=80');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
 }
+
+
 
 body {
     font-family: "Gill Sans", sans-serif;

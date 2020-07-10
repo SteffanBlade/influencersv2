@@ -122,6 +122,8 @@ class Articles
      * @var string
      *
      * @ORM\Column(name="Title", type="string", length=250, nullable=false)
+     * @Assert\NotBlank
+     * @Assert\Length(min=10)
      */
     private $title;
 
@@ -173,6 +175,8 @@ class Articles
      * @var string|null
      *
      * @ORM\Column(name="content", type="text", length=16777215, nullable=true)
+     * @Assert\NotBlank
+     * @Assert\Length(min=20)
      */
     private $content;
 

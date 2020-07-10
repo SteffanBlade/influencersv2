@@ -38,7 +38,7 @@
             </div>
         </div>
         <a  class="btn btn-outline-dark my-2 my-sm-0 ml-1 mb-0 pb-0" id="likeBtn-{{ article.id }}">Vote!</a>
-        <div  class="btn disabled ml-1"  style="width: 150px"   id="votes-{{ article.id }}">{{ article.votes }} Points</div>
+        <div  class="btn disabled ml-1"  style="width: 100px"   id="votes-{{ article.id }}">{{ article.votes }} Points</div>
         {% endif %}
 
 
@@ -47,6 +47,11 @@
 <script>
     $(document).on('click', 'a#likeBtn-{{ article.id }}', function(){
         var points = $('input[name="rating"]:checked').val();
+        if(points < 3){
+            points = points * 0.8 ;
+        }else {
+            points = points * 1.2;
+        }
         console.log(points);
         $.ajax({
             url:'{{ (path('liked')) }}',
